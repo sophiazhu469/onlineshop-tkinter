@@ -1,0 +1,6 @@
+Toytrain,Toy,wooden train,30
+How to write Python,Book,A whole guide to teach you Python,32
+Paper Mario,Game,Nintendo Game Super Mario fight King Olly,99
+Lego Roses,Toy,Build your own roses,35
+Escape from Freedom,Book,A book from German Psychologist Eric Fromm,25
+Zelda,Game,Nintendo Game Hero Link save the kingdom,95

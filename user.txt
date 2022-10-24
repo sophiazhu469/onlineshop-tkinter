@@ -1,0 +1,3 @@
+staff,Sophia,sophia469
+staff,Rene,rene526
+member,Oliver,02111111,oli@gmail.com,oliver
