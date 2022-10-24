@@ -55,7 +55,7 @@ class Product:
 
     def __str__(self) -> str:
         # Dunder method to return details of the product
-        return str(self.__productID) + self.__productName + self.__productCategory.categoryName + self.__productDescrip + self.__productPrice
+        return 'Product ID:' + str(self.__productID) + '\nProduct Name: '+ self.__productName + '\nProduct Category: '+ self.__productCategory.categoryName + '\nDescription: '+ self.__productDescrip + '\nPrice: $'+ self.__productPrice +'\n\n'
 
     def __eq__(self,other) -> bool:
         # Compare product name with a given product name to check if it is the same product

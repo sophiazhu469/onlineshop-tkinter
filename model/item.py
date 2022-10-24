@@ -10,7 +10,7 @@ class Item:
 
 
     def __str__(self):
-        return self.__itemproduct.productName +':' +self.__quantity   
+        return (self.__itemproduct.productName,self.__quantity ,self.calculateTotal())  
 
     def __eq__(self,other):
         return self.itemProduct==other.itemProduct   

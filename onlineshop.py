@@ -210,23 +210,22 @@ class OnlineShop:
                 return None    
 
     def viewAllProducts(self) -> str:
-        tupleList=[]
+        productList=[]
         for product in self.allProducts:
-            prodAttrTuple=(product.productID,product.productName,product.productCategory.categoryName,product.productPrice)
-            tupleList.append(prodAttrTuple)
-        return tupleList
+            productList.append(product.productName)
+        return productList
 
     def viewProductDetails(self,pName: str) -> Product:
         for product in self.allProducts:
-            prodAttrTuple=(product.productID,product.productName,product.productCategory.categoryName,product.productDescrip,product.productPrice)
             if product.productName==pName:
-                return prodAttrTuple
+                return product
 
 
     def addItem(self, customerName: str ,pName: str) -> str:
 
         # Add a Product to a Member/Guest's shopping Cart,if it is a guest, create a guest object and its shoppingcart
         aProduct=self.searchProductByName(pName)
+
         if len(self.allMembers)!=0:        
             aMember=self.searchMember(customerName)
             if aMember:
@@ -254,24 +253,30 @@ class OnlineShop:
                 aGuest.removeItem(aProduct) 
 
     def viewCart(self,customerName: str ) -> str:
-        # A member/guest view their shopping cart items
-        if customerName=='Guest':
-            itemList=[self.guest.viewCartDetails()]
-            tupleList=[]
-            for i in itemList:
-                item=(i.itemProduct.productName,i.quantity)
-                tupleList.append(item)
-            return tupleList
-        else:    
-            for member in self.allMembers:
-                if member.memberName==customerName:
-                    aMember=member
-            itemList=[aMember.viewCartDetails()]
-            tupleList=[]
-            for i in itemList:
-                item=(i.itemProduct.productName,i.quantity)
-                tupleList.append(item)
-            return tupleList        
+        if customerName != 'guest':
+            self.searchMember(customerName).viewCartDetails()
+        else:
+            self.guest.viewCartDetails()   
+
+    # def viewCart(self,customerName: str ) -> str:
+    #     # A member/guest view their shopping cart items
+    #     if customerName=='Guest':
+    #         itemList=[self.guest.viewCartDetails()]
+    #         tupleList=[]
+    #         for i in itemList:
+    #             item=(i.itemProduct.productName,i.quantity)
+    #             tupleList.append(item)
+    #         return tupleList
+    #     else:    
+    #         for member in self.allMembers:
+    #             if member.memberName==customerName:
+    #                 aMember=member
+    #         itemList=[aMember.viewCartDetails()]
+    #         tupleList=[]
+    #         for i in itemList:
+    #             item=(i.itemProduct.productName,i.quantity)
+    #             tupleList.append(item)
+    #         return tupleList        
     
     def checkout(self,mName):
         pass

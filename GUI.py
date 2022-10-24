@@ -1,5 +1,6 @@
-from tabnanny import check
+
 import tkinter as tk
+from tkinter import ttk
 from tkinter.messagebox import showinfo
 from onlineshop import OnlineShop
 
@@ -33,6 +34,23 @@ root.resizable(False, False)
 root.title('Lincoln Online Shop')
 
 # t = Table(root)
+
+def show_prod_detail():
+    selected_prod_indics=prod_listbox.curselection()
+    selected_prod=prod_listbox.get(selected_prod_indics)
+    prod__detail_label2.config(text=aShop.viewProductDetails(selected_prod))
+
+
+def add_to_cart():
+    selected_prod_indics=prod_listbox.curselection()
+    selected_prod=prod_listbox.get(selected_prod_indics)
+    aShop.addItem(aShop.guest,selected_prod)
+    cartList=aShop.viewCart(aShop.guest)
+    for item in cartList:
+        cart_treeview.insert('',tk.END,values=item)
+
+
+
 
 #app frame
 app_frame=tk.Frame(root,relief=tk.FLAT,borderwidth=3)
@@ -76,7 +94,7 @@ prod_scrollbar.grid(column=2,row=1)
 
 
 #product Listbox
-prod=tk.StringVar()
+prod=tk.StringVar(value=aShop.viewAllProducts())
 
 prod_listbox=tk.Listbox(all_prod_frame,listvariable=prod,exportselection=False)
 # prod_listbox.place(x=320,y=60,width=210,height=160)
@@ -86,7 +104,7 @@ prod_listbox.config(yscrollcommand= prod_scrollbar.set)
 prod_scrollbar.config(command= prod_listbox.yview)
 
 # view product details button
-view_details_button=tk.Button(all_prod_frame,text='View Details')
+view_details_button=tk.Button(all_prod_frame,text='View Details',command=show_prod_detail)
 view_details_button.grid(column=1,row=2)
 
 
@@ -102,15 +120,14 @@ prod_detail_label.grid(column=1,row=0)
 
 
 #product detail Listbox
-
-
-prod__detail_listbox=tk.Listbox(prod_detail_frame,listvariable=prod,exportselection=False)
+# prod_details=tk.StringVar(value=aShop.viewProductDetails())
+prod__detail_label2=tk.Label(prod_detail_frame,text='Select a product to view\n')
 # prod_listbox.place(x=320,y=60,width=210,height=160)
 # prod_listbox.pack(side=tk.BOTTOM,fill='both')
-prod__detail_listbox.grid(column=1,row=1)
+prod__detail_label2.grid(column=1,row=1)
 
 # view product details button
-add_to_cart_button=tk.Button(prod_detail_frame,text='Add To Cart')
+add_to_cart_button=tk.Button(prod_detail_frame,text='Add To Cart', command=add_to_cart)
 add_to_cart_button.grid(column=1,row=2)
 
 
@@ -123,8 +140,12 @@ cart_label=tk.Label(cart_frame,text='Shopping Cart')
 cart_label.grid(column=1,row=0)
 
 #shopping cart listbox
-cart_listbox=tk.Listbox(cart_frame)
-cart_listbox.grid(column=0,row=1,columnspan=2)
+columns=('item_name','item_quantity','total_price')
+cart_treeview=ttk.Treeview (cart_frame,columns=columns,show='headings')
+cart_treeview.heading('item_name',text='Item Name')
+cart_treeview.heading('item_quantity',text='Quantity')
+cart_treeview.heading('total_price',text='Total Price')
+cart_treeview.grid(column=0,row=1,columnspan=3)
 
 # remove item button
 remove_button=tk.Button(cart_frame,text='Remove Item')

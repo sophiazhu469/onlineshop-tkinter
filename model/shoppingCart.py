@@ -42,8 +42,10 @@ class ShoppingCart:
 
     def viewCartDetails(self)-> str:
         # To view all items in the shopping Cart
+        itemList=[]
         for item in self.allItems:
-            return item
+            itemList.append(item)
+        return itemList
 
     def clearCart(self):
         self.allItems=[]

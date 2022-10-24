@@ -16,14 +16,14 @@ class Customer(User):
 
 
     def removeItem(self,anItem):
-        self._myShoppingCart.remove(anItem)
+        self.myShoppingCart.remove(anItem)
    
         
     def viewCartDetails(self)-> str:
-        return self._myShoppingCart.viewCartDetails()
+        return self.myShoppingCart.viewCartDetails()
 
     def checkOut(self) -> None:
-        self._myShoppingCart=[]    
+        self.myShoppingCart=[]    
 
 
 
