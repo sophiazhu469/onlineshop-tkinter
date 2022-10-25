@@ -5,19 +5,28 @@ class Item:
     """! The Item Class"""
     def __init__(self,aProduct: Product, quantity: int=1):
         """! The initialiser for Order"""
+        
         self.__itemProduct=aProduct
         self.__quantity=quantity
+        self.__itemID=aProduct.productID
 
 
-    def __str__(self):
-        return (self.__itemproduct.productName,self.__quantity ,self.calculateTotal())  
+    # def __str__(self):
+    #     return (self.__itemProduct.productName,str(self.__quantity) ,str(self.calculateTotal()))  
 
     def __eq__(self,other):
-        return self.itemProduct==other.itemProduct   
+        return self.itemProduct.productName==other.itemProduct.productName   
 
     @property
     def itemProduct(self):
         return self.__itemProduct
+
+
+    @property
+    def itemID(self):
+        return self.__itemID    
+
+        
 
     @property
     def quantity(self):
@@ -29,4 +38,4 @@ class Item:
 
 
     def calculateTotal(self):
-        return self.itemProduct.productPrice*self.quantity     
+        return float(self.itemProduct.productPrice)*self.quantity     

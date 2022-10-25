@@ -1,14 +1,15 @@
 from model.member import Member
 from model.customer import Customer
+from model.shoppingCart import ShoppingCart
 
 class Guest(Customer):
     """! The Guest Class"""
     nextID = 200
-    def __init__(self,aCart,gName='guest'):
+    def __init__(self,aCart):
         """! The initialiser for Guest"""
-        # self.__myShoppingCart=aCart
-        self.__guestName=gName
-        super().__init__(aCart)
+        self._myShoppingCart=aCart
+        # super().__init__(aCart)
+        self.__guestName='guest'
     
 
     @property
@@ -22,3 +23,7 @@ class Guest(Customer):
     def register(self,mName,mPhone,mEmail,mPassword):
         aMember=Member(mName,mPhone,mEmail,mPassword)
         return aMember
+
+aCart=ShoppingCart()
+aGuest=Guest(aCart)
+print(aGuest.guestName)

@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showinfo
 from onlineshop import OnlineShop
-
+from model.shoppingCart import ShoppingCart
 aShop=OnlineShop()
 
 
@@ -42,14 +42,32 @@ def show_prod_detail():
 
 
 def add_to_cart():
+    # cart_treeview.delete(0.0,tk.END)
     selected_prod_indics=prod_listbox.curselection()
     selected_prod=prod_listbox.get(selected_prod_indics)
-    aShop.addItem(aShop.guest,selected_prod)
-    cartList=aShop.viewCart(aShop.guest)
-    for item in cartList:
-        cart_treeview.insert('',tk.END,values=item)
+    content=aShop.addItem(aShop.guest,selected_prod)
+    # print(cartList)
+    # # cartlist=aShop.viewCart(aShop.guest)
+    # for content in cartList:
+    cart_treeview.insert('',tk.END,values=content)
+    print(len(aShop.viewCart(aShop.guest)))
 
 
+
+def remove_item():
+    selected_item=cart_treeview.selection()[0]
+    pname=cart_treeview.item(selected_item)['values'][0]
+    aShop.removeItem(aShop.guest,pname)
+    cart_treeview.delete(selected_item)
+    print(len(aShop.viewCart(aShop.guest)))
+
+
+
+def empty_cart():
+    
+    cart_treeview.delete(*cart_treeview.get_children())
+    aShop.emptyCart(aShop.guest)
+    print(len(aShop.viewCart(aShop.guest)))
 
 
 #app frame
@@ -148,13 +166,17 @@ cart_treeview.heading('total_price',text='Total Price')
 cart_treeview.grid(column=0,row=1,columnspan=3)
 
 # remove item button
-remove_button=tk.Button(cart_frame,text='Remove Item')
+remove_button=tk.Button(cart_frame,text='Remove Item',command=remove_item)
 remove_button.grid(column=0,row=2)
+
+# empty cart button
+empty_cart_button=tk.Button(cart_frame,text='Empty Cart',command=empty_cart)
+empty_cart_button.grid(column=1,row=2)
+
 
 #checkout button
 checkout_button=tk.Button(cart_frame,text='Checkout')
-checkout_button.grid(column=1,row=2)
-
+checkout_button.grid(column=2,row=2)
 
 
 

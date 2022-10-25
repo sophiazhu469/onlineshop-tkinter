@@ -12,15 +12,18 @@ class Customer(User):
         return self._myShoppingCart    
 
     def addItem(self,aProduct):
-       self.myShoppingCart.addItem(aProduct)
+       return self.myShoppingCart.addItem(aProduct)
 
 
     def removeItem(self,anItem):
-        self.myShoppingCart.remove(anItem)
+        self.myShoppingCart.removeItem(anItem)
    
         
     def viewCartDetails(self)-> str:
         return self.myShoppingCart.viewCartDetails()
+
+    def emptyCart(self):
+        self.myShoppingCart.emptyCart()    
 
     def checkOut(self) -> None:
         self.myShoppingCart=[]    

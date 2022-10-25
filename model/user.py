@@ -5,5 +5,5 @@ from datetime import date
 
 # User Abstract Class
 class User(ABC):
-    def __init__(self, name: str='None'):
-        self._userName = 'None'
+    def __init__(self, name='None'):
+        self._userName = name

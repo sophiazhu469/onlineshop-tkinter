@@ -67,9 +67,9 @@ class OnlineShop:
         productFileName = open('product.txt','r')
         for line in productFileName:
             row=line.strip().split(',')
-            print(row[1])
+            # print(row[1])
             a=self.searchCategory(row[1])
-            print(a)
+            # print(a)
             self.createProduct(row[0],a,row[2],row[3])
         productFileName.close()
       
@@ -200,7 +200,7 @@ class OnlineShop:
             if member.memberName==memberName:
                 return member
             else:
-                return False    
+                return self.guest   
 
     def searchStaff(self,staffName):
         for staff in self.allStaff:
@@ -226,37 +226,43 @@ class OnlineShop:
         # Add a Product to a Member/Guest's shopping Cart,if it is a guest, create a guest object and its shoppingcart
         aProduct=self.searchProductByName(pName)
 
-        if len(self.allMembers)!=0:        
-            aMember=self.searchMember(customerName)
-            if aMember:
-                aMember.addItem(aProduct) 
-            else:
-                self.guest.addItem(aProduct)
-                # return 'guest'                 
-        else:
-            self.guest.addItem(aProduct)
-            # return 'guest' 
+        # if len(self.allMembers)!=0:        
+        aMember=self.searchMember(customerName)
+        print(type(aMember))
+        return aMember.addItem(aProduct)
+            
+        #     if aMember:
+        #         aMember.addItem(aProduct) 
+        #         return 'member'
+        #     else:
+        #         self.guest.addItem(aProduct)
+        #         return 'hello'               
+        # else:
+        #     self.guest.addItem(aProduct)
+        #     return self.cart.allItems
 
 
     def removeItem(self,customerName: str, pName: str) -> str:
         # Remove a Product from a Member/Guest's shopping Cart
-        for product in self.allProducts:
-            if product.productName==pName:
-                aProduct=product
-        for member in self.allMembers:
-            if member.memberName==customerName:
-                if aProduct in member.myShoppingCart.allItems:
-                    member.removeItem(aProduct)
-                    return True   
-            else:
-                aGuest=Guest()
-                aGuest.removeItem(aProduct) 
+        # aProduct=self.searchProductByName(pName)
+        aMember=self.searchMember(customerName)
+        for item in aMember.myShoppingCart.allItems:
+            if item.itemProduct.productName==pName:
+                anItem=item
+                aMember.removeItem(anItem)
 
+    def emptyCart(self,customerName):
+        aMember=self.searchMember(customerName)
+        aMember.emptyCart()
+
+        
     def viewCart(self,customerName: str ) -> str:
         if customerName != 'guest':
-            self.searchMember(customerName).viewCartDetails()
+            return self.searchMember(customerName).viewCartDetails()
+            
         else:
-            self.guest.viewCartDetails()   
+            return self.guest.viewCartDetails()
+           
 
     # def viewCart(self,customerName: str ) -> str:
     #     # A member/guest view their shopping cart items
