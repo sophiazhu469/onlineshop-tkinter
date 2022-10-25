@@ -255,7 +255,7 @@ class OnlineShop:
         aMember=self.searchMember(customerName)
         aMember.emptyCart()
 
-        
+
     def viewCart(self,customerName: str ) -> str:
         if customerName != 'guest':
             return self.searchMember(customerName).viewCartDetails()
@@ -264,25 +264,6 @@ class OnlineShop:
             return self.guest.viewCartDetails()
            
 
-    # def viewCart(self,customerName: str ) -> str:
-    #     # A member/guest view their shopping cart items
-    #     if customerName=='Guest':
-    #         itemList=[self.guest.viewCartDetails()]
-    #         tupleList=[]
-    #         for i in itemList:
-    #             item=(i.itemProduct.productName,i.quantity)
-    #             tupleList.append(item)
-    #         return tupleList
-    #     else:    
-    #         for member in self.allMembers:
-    #             if member.memberName==customerName:
-    #                 aMember=member
-    #         itemList=[aMember.viewCartDetails()]
-    #         tupleList=[]
-    #         for i in itemList:
-    #             item=(i.itemProduct.productName,i.quantity)
-    #             tupleList.append(item)
-    #         return tupleList        
     
     def checkout(self,mName):
         pass

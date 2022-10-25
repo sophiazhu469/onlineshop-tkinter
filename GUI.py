@@ -1,9 +1,10 @@
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk,Toplevel
+from functools import partial
 from tkinter.messagebox import showinfo
 from onlineshop import OnlineShop
-from model.shoppingCart import ShoppingCart
+
 aShop=OnlineShop()
 
 
@@ -33,7 +34,56 @@ root.geometry('800x800')
 root.resizable(False, False)
 root.title('Lincoln Online Shop')
 
-# t = Table(root)
+
+
+def login_page():
+     
+    # Toplevel object which will
+    # be treated as a new window
+    login_window = Toplevel(root)
+ 
+    # sets the title of the
+    # Toplevel widget
+    login_window.title("Log In")
+ 
+    # sets the geometry of toplevel
+    login_window.geometry("400x400")
+ 
+    # A Label widget to show in toplevel
+    tk.Label(login_window,text ="Please enter your user name and password to login").grid(row=0,column=1)
+
+    
+    #username label and text entry box
+    usernameLabel = tk.Label(login_window, text="User Name").grid(row=2, column=0)
+    username = tk.StringVar()
+    usernameEntry = tk.Entry(login_window, textvariable=username).grid(row=2, column=1)  
+
+    #password label and password entry box
+    passwordLabel = tk.Label(login_window,text="Password").grid(row=3, column=0)  
+    password = tk.StringVar()
+    passwordEntry = tk.Entry(login_window, textvariable=password, show='*').grid(row=3, column=1)  
+
+    #login button
+    loginButton = tk.Button(login_window, text="Login").grid(row=5, column=0)
+ 
+    # def validation():
+    # #getting form data
+    #     uname=username.get()
+    #     pwd=password.get()
+    #     #applying empty validation
+    #     if uname=='' or pwd=='':
+    #         message.set("fill the empty field!!!")
+    #     else:
+    #         if uname=="abcd@gmail.com" and pwd=="abc123":
+    #             message.set("Login success")
+    #         else:
+    #             message.set("Wrong username or password!!!")
+
+
+
+
+
+
 
 def show_prod_detail():
     selected_prod_indics=prod_listbox.curselection()
@@ -91,7 +141,7 @@ search_prod_button=tk.Button(nav_frame,text='Search Product')
 search_prod_button.grid(column=1,row=1,pady=20)
 
 # login button
-login_button=tk.Button(nav_frame,text='Log In')
+login_button=tk.Button(nav_frame,text='Log In',command=login_page)
 login_button.grid(column=2,row=1,pady=20)
 
 
@@ -177,6 +227,12 @@ empty_cart_button.grid(column=1,row=2)
 #checkout button
 checkout_button=tk.Button(cart_frame,text='Checkout')
 checkout_button.grid(column=2,row=2)
+
+
+
+
+
+ 
 
 
 
