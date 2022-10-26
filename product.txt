@@ -4,3 +4,8 @@ Paper Mario,Game,Nintendo Game Super Mario fight King Olly,99
 Lego Roses,Toy,Build your own roses,35
 Escape from Freedom,Book,A book from German Psychologist Eric Fromm,25
 Zelda,Game,Nintendo Game Hero Link save the kingdom,95
+Toycar,Toy,Remote control speed car,20
+Ring Fitness,Game,Nintendo Switch Exercise Game,150
+It,Book,A horror story by Stephen King,25
+Dune,Book,A book from Frank Herbert,28
+Jaws,Book,A book from Peter Benchley,20

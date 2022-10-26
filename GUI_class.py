@@ -1,4 +1,5 @@
 
+from atexit import register
 from itertools import product
 from re import L
 from tabnanny import check
@@ -345,8 +346,10 @@ def checkout():
     if aShop.viewCart('guest')==[]:
         showinfo(title='error',message='Cart is empty')
     else:    
-        showinfo(title='error', message='Please log in first')
+        showinfo(title='error', message='Please Log in or Register first')
 
+def register():
+    pass
 
 #app frame
 app_frame=tk.Frame(root,relief=tk.FLAT,borderwidth=3)
@@ -361,27 +364,30 @@ nav_frame=tk.Frame(root)
 nav_frame.grid(column=0,row=1,sticky=tk.N,columnspan=2)
 
 #view product button
-view_prod_button=tk.Button(nav_frame,text=' Search Product By Category',command=search_prod_by_category)
-view_prod_button.grid(column=0,row=1,padx=20)
+view_prod_button=tk.Button(nav_frame,text=' Search By Category',command=search_prod_by_category)
+view_prod_button.grid(column=0,row=1,padx=5)
 
 #search product entry
 product_input=tk.StringVar()
 search_prod_entry=tk.Entry(nav_frame,textvariable=product_input)
-search_prod_entry.grid(column=1,row=1,padx=20)
+search_prod_entry.grid(column=1,row=1,padx=5)
 
 #search product button
 search_prod_button=tk.Button(nav_frame,text='Search Product By Name',command=search_prod_by_name)
-search_prod_button.grid(column=2,row=1,padx=20)
+search_prod_button.grid(column=2,row=1,padx=5)
 
 
 # Member login button
-member_login_button=tk.Button(nav_frame,text='Member Log In',command=login_page)
-member_login_button.grid(column=3,row=1,padx=20)
+member_login_button=tk.Button(nav_frame,text='Member LogIn',command=login_page)
+member_login_button.grid(column=0,row=2,padx=5)
 
+#Register Member
+register_button=tk.Button(nav_frame,text='Register',command=register)
+register_button.grid(column=1,row=2)
 
 # staff login button
-staff_login_button=tk.Button(nav_frame,text='Staff Log In',command=login_page)
-staff_login_button.grid(column=4,row=1,padx=20)
+staff_login_button=tk.Button(nav_frame,text='Staff LogIn',command=login_page)
+staff_login_button.grid(column=2,row=2,padx=5)
 
 # product frame
 all_prod_frame=tk.Frame(root)
