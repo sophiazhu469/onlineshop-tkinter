@@ -1,3 +1,4 @@
+
 class Category:
     nextID=400
     def __init__(self,categoryName: str):
@@ -29,8 +30,10 @@ class Category:
         self.categoryName=value      
 
     def getProductList(self):
+        productList=[]
         for product in self.__productList:
-            return product    
+            productList.append(product)
+        return productList    
               
     def countProducts(self):
         return len(self.productList)

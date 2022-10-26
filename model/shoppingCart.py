@@ -66,7 +66,7 @@ class ShoppingCart:
         totalSum=0
         # Use the Product Objects contained in the __allItems list to get Total Amount of the shopping cart
         for item in self.__allItems:
-            totalsum += item.calculateTotal
+            totalSum += item.calculateTotal()
         return totalSum    
 
 

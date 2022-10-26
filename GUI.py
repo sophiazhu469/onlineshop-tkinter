@@ -1,4 +1,6 @@
 
+from itertools import product
+from re import L
 import tkinter as tk
 from tkinter import ttk,Toplevel
 from functools import partial
@@ -64,7 +66,12 @@ def login_page():
     passwordEntry = tk.Entry(login_window, textvariable=password, show='*').grid(row=3, column=1)  
 
     #login button
-    loginButton = tk.Button(login_window, text="Login").grid(row=5, column=0)
+    loginButton = tk.Button(login_window, text="Login",command=login).grid(row=5, column=0)
+
+    # def login():
+    #     if aShop.memberLogIn(username,password):
+
+
  
     # def validation():
     # #getting form data
@@ -82,8 +89,14 @@ def login_page():
 
 
 
+def search_prod_by_name():
+    prod.set(aShop.searchProductByName(search_prod_entry.get().lower()))
 
 
+def search_prod_by_category():
+    prod.set(aShop.searchProductByCategory(search_prod_entry.get().lower()))
+
+    
 
 def show_prod_detail():
     selected_prod_indics=prod_listbox.curselection()
@@ -101,6 +114,7 @@ def add_to_cart():
     # for content in cartList:
     cart_treeview.insert('',tk.END,values=content)
     print(len(aShop.viewCart(aShop.guest)))
+    sub_total_value_label.config(text=aShop.getSubTotal('guest'))
 
 
 
@@ -133,18 +147,27 @@ nav_frame=tk.Frame(root)
 nav_frame.grid(column=0,row=1,sticky=tk.N,columnspan=2)
 
 #view product button
-view_prod_button=tk.Button(nav_frame,text=' View Product')
-view_prod_button.grid(column=0,row=1,pady=20)
+view_prod_button=tk.Button(nav_frame,text=' Search Product By Category',command=search_prod_by_category)
+view_prod_button.grid(column=0,row=1,padx=20)
+
+#search product entry
+product_input=tk.StringVar()
+search_prod_entry=tk.Entry(nav_frame,textvariable=product_input)
+search_prod_entry.grid(column=1,row=1,padx=20)
 
 #search product button
-search_prod_button=tk.Button(nav_frame,text='Search Product')
-search_prod_button.grid(column=1,row=1,pady=20)
-
-# login button
-login_button=tk.Button(nav_frame,text='Log In',command=login_page)
-login_button.grid(column=2,row=1,pady=20)
+search_prod_button=tk.Button(nav_frame,text='Search Product By Name',command=search_prod_by_name)
+search_prod_button.grid(column=2,row=1,padx=20)
 
 
+# Member login button
+member_login_button=tk.Button(nav_frame,text='Member Log In',command=login_page)
+member_login_button.grid(column=3,row=1,padx=20)
+
+
+# staff login button
+staff_login_button=tk.Button(nav_frame,text='Staff Log In',command=login_page)
+staff_login_button.grid(column=4,row=1,padx=20)
 
 # product frame
 all_prod_frame=tk.Frame(root)
@@ -187,11 +210,8 @@ prod_detail_label = tk.Label(prod_detail_frame,text='Product Detail')
 prod_detail_label.grid(column=1,row=0)
 
 
-#product detail Listbox
-# prod_details=tk.StringVar(value=aShop.viewProductDetails())
+#product detail display label
 prod__detail_label2=tk.Label(prod_detail_frame,text='Select a product to view\n')
-# prod_listbox.place(x=320,y=60,width=210,height=160)
-# prod_listbox.pack(side=tk.BOTTOM,fill='both')
 prod__detail_label2.grid(column=1,row=1)
 
 # view product details button
@@ -223,10 +243,19 @@ remove_button.grid(column=0,row=2)
 empty_cart_button=tk.Button(cart_frame,text='Empty Cart',command=empty_cart)
 empty_cart_button.grid(column=1,row=2)
 
+#sub total label
+sub_total_label=tk.Label(cart_frame,text='Sub Total')
+sub_total_label.grid(column=2,row=2)
+
+#sub total value label
+sub_total_value_label=tk.Label(cart_frame,text='$0.00',bg='white')
+sub_total_value_label.grid(column=3,row=2)
+
+
 
 #checkout button
 checkout_button=tk.Button(cart_frame,text='Checkout')
-checkout_button.grid(column=2,row=2)
+checkout_button.grid(column=5,row=2)
 
 
 
@@ -234,6 +263,5 @@ checkout_button.grid(column=2,row=2)
 
  
 
-
-
-root.mainloop()
+if __name__ == "__main__": 
+    root.mainloop()

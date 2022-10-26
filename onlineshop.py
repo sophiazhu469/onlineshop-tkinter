@@ -1,5 +1,6 @@
 # Imports
 from datetime import date
+from logging import raiseExceptions
 
 
 from model.category import Category
@@ -14,6 +15,7 @@ from model.product import Product
 from model.shoppingCart import ShoppingCart
 from model.staff import Staff
 from model.user import User
+from model.badRequestError import BadRequestError
 
 
 from typing import List
@@ -59,7 +61,7 @@ class OnlineShop:
     def __initilizerCategory(self):
         categoryFileName = open('category.txt','r')
         for line in categoryFileName:
-            categoryName=line.rstrip()
+            categoryName=line.rstrip().lower()
             self.createCategory(categoryName)  
         categoryFileName.close()
 
@@ -68,9 +70,9 @@ class OnlineShop:
         for line in productFileName:
             row=line.strip().split(',')
             # print(row[1])
-            a=self.searchCategory(row[1])
+            a=self.searchCategory(row[1].lower())
             # print(a)
-            self.createProduct(row[0],a,row[2],row[3])
+            self.createProduct(row[0].lower(),a,row[2].lower(),row[3])
         productFileName.close()
       
     def __initilizerUser(self):
@@ -169,30 +171,32 @@ class OnlineShop:
             if order.OrderID==ordID:
                 order.deliveryAddress=anAddress
                 
+    def searchCategory(self,cateName) -> Category:
+        for category in self.allCategories:
+            if category.categoryName==cateName:
+                return category
+
                 
 
     def searchProductByName(self,pName: str) -> Product:
         # Find Product based on a given product name
         for product in self.allProducts:
             if product.productName==pName:
-                return product
+                return product.productName
 
 
 
     def searchProductByCategory(self,pCategory: str) -> Product:
         # Find Products based on a given product category
-        for category in self.allCategories:
-            if category.categoryName==pCategory:
-                return category.getProductList()
-            else:
-                return None
+        prodNameList=[]
+        aCategory=self.searchCategory(pCategory)
+        for product in aCategory.getProductList():
+            prodNameList.append(product.productName)
+        return prodNameList        
+   
         
 
-    def searchCategory(self,cateName) -> Category:
-        for category in self.allCategories:
-            if category.categoryName==cateName:
-                return category
-      
+
 
 
     def searchMember(self,memberName):
@@ -263,7 +267,9 @@ class OnlineShop:
         else:
             return self.guest.viewCartDetails()
            
-
+    def getSubTotal(self,customerName:str):
+        aMember=self.searchMember(customerName)
+        return '$'+str(aMember.myShoppingCart.getTotalSum())
     
     def checkout(self,mName):
         pass
@@ -327,7 +333,7 @@ class OnlineShop:
             if staff.staffName==sName and staff.staffPassword==sPassword:
                 return staff
             else:
-                return False 
+                raise BadRequestError('User name and password does not match')
         
 
     def memberLogIn(self,mName: str, mPassword: str) -> str :
@@ -336,7 +342,8 @@ class OnlineShop:
             if member.memberName==mName and member.memberPassword==mPassword:
                 return member
             else:
-                return False
+                raise BadRequestError('User name and password does not match')
+               
     
     
 
@@ -381,3 +388,4 @@ print(len(aShop.allStaff))
 print(aShop.allMembers[0].memberName)
 print(aShop.allMembers[0].memberPassword)
 print(aShop.guest.guestName)
+print(len(aShop.allCategories))
