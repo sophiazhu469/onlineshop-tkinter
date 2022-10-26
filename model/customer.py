@@ -11,6 +11,11 @@ class Customer(User):
     def myShoppingCart(self):
         return self._myShoppingCart    
 
+
+    @myShoppingCart.setter
+    def myShoppingCart(self,value):
+        self.myShoppingCart=value    
+
     def addItem(self,aProduct):
        return self.myShoppingCart.addItem(aProduct)
 

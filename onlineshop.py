@@ -81,7 +81,7 @@ class OnlineShop:
             row=line.strip().split(',')
             if row[0]=='staff':
                 self.createStaff(row[1],row[2])
-            else:
+            elif row[0]=='member':
                 self.createMember(row[1],row[2],row[3],row[4])
         userFileName.close()
 
@@ -182,7 +182,7 @@ class OnlineShop:
         # Find Product based on a given product name
         for product in self.allProducts:
             if product.productName==pName:
-                return product.productName
+                return product
 
 
 
@@ -229,7 +229,6 @@ class OnlineShop:
 
         # Add a Product to a Member/Guest's shopping Cart,if it is a guest, create a guest object and its shoppingcart
         aProduct=self.searchProductByName(pName)
-
         # if len(self.allMembers)!=0:        
         aMember=self.searchMember(customerName)
         print(type(aMember))
@@ -340,6 +339,7 @@ class OnlineShop:
         # Member use name and password to log in
         for member in self.allMembers:
             if member.memberName==mName and member.memberPassword==mPassword:
+                member.myShoppingCart=self.cart
                 return member
             else:
                 raise BadRequestError('User name and password does not match')

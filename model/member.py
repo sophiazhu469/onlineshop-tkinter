@@ -55,6 +55,12 @@ class Member(Customer):
         return self.__allMyOrders  
 
 
+
+    @myShoppingCart.setter
+    def myShoppingCart(self,value):
+        self.__myShoppingCart=value
+
+
     @memberPhone.setter
     def memberPhone(self,value):
         self.__memberPhone=value
@@ -66,7 +72,9 @@ class Member(Customer):
 
     @memberPassword.setter
     def memberPassword(self,value):
-        self.__memberPassword=value     
+        self.__memberPassword=value  
+
+
 
 
     def __eq__(self,other) -> bool:

@@ -1,6 +1,4 @@
 
-from itertools import product
-from re import L
 import tkinter as tk
 from tkinter import ttk,Toplevel
 from functools import partial
@@ -66,10 +64,15 @@ def login_page():
     passwordEntry = tk.Entry(login_window, textvariable=password, show='*').grid(row=3, column=1)  
 
     #login button
-    loginButton = tk.Button(login_window, text="Login",command=login).grid(row=5, column=0)
+    loginButton = tk.Button(login_window, text="Login",command=member_login).grid(row=5, column=0)
 
-    # def login():
-    #     if aShop.memberLogIn(username,password):
+    def member_login():
+        if aShop.memberLogIn(username,password):
+            login_window.destroy
+            member_window = Toplevel(root)
+            member_window.title('Member Page')
+            member_window.geometry("400x400")
+
 
 
  

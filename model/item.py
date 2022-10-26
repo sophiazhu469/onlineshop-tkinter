@@ -8,7 +8,7 @@ class Item:
         
         self.__itemProduct=aProduct
         self.__quantity=quantity
-        self.__itemID=aProduct.productID
+        # self.__itemID=aProduct.productID
 
 
     # def __str__(self):
@@ -22,9 +22,9 @@ class Item:
         return self.__itemProduct
 
 
-    @property
-    def itemID(self):
-        return self.__itemID    
+    # @property
+    # def itemID(self):
+    #     return self.__itemID    
 
         
 

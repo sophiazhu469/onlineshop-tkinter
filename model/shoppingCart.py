@@ -32,7 +32,7 @@ class ShoppingCart:
         # Add an Item Object and quantity of it to the shopping cart
         anItem=Item(aProduct,1)
         self.allItems.append(anItem)
-        return (anItem.itemProduct.productName,str(anItem.quantity),str(anItem.calculateTotal()))
+        return (aProduct.productName,str(anItem.quantity),str(anItem.calculateTotal()))
         # anItem=Item(aProduct,1)
         # if len(self.__allItems)!=0:
         #     for item in self.__allItems:
