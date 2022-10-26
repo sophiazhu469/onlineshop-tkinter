@@ -1,6 +1,7 @@
 
 from itertools import product
 from re import L
+from tabnanny import check
 import tkinter as tk
 from tkinter import ttk,Toplevel
 from functools import partial
@@ -60,7 +61,7 @@ def login_page():
             login_window.destroy()
             member_window = Toplevel(root)
             member_window.title('Member Page')
-            member_window.geometry("800x800")
+            member_window.geometry("800x1200")
             
 
             def search_prod_by_name():
@@ -224,8 +225,59 @@ def login_page():
             checkout_button=tk.Button(cart_frame,text='Checkout')
             checkout_button.grid(column=5,row=2)
 
+            #order frame
+            order_frame=tk.Frame(member_window)
+            order_frame.grid(column=0,row=4)
 
-        # A Label widget to show in toplevel
+            #order history label
+            order_history_label=tk.Label(order_frame,text='Orders')
+            order_history_label.grid(column=0,row=0)
+            
+             #Order Listbox
+            order=tk.StringVar(value=aShop.memberViewAllOrders(memberName))
+
+            order_listbox=tk.Listbox(order_frame,listvariable=order,exportselection=False)
+            order_listbox.grid(column=0,row=1)
+
+         
+    
+
+            # # view order details button
+            # view_order_details_button=tk.Button(order_frame,text='View Order',command=show_order_detail)
+            # view_order_details_button.grid(column=1,row=2)
+
+            # Order details frame
+            order_detail_frame=tk.Frame(member_window)
+            order_detail_frame.grid(column=1,row=4)
+
+            # Order detail Label
+            order_detail_label = tk.Label(order_detail_frame,text='Order Detail')
+            # all_prod_label.pack(side=tk.TOP)
+            order_detail_label.grid(column=1,row=0)
+
+
+            #order detail display label
+            order__detail_label2=tk.Label(order_detail_frame,text='Select a order to view status\n')
+            order__detail_label2.grid(column=1,row=1)
+
+
+
+            #order buttons frame
+            order_buttons_frame=tk.Frame(member_window)
+            order_buttons_frame.grid(column=0,row=5,columnspan=2)
+
+            #check order status button
+            check_status_button=tk.Button(order_buttons_frame,text='Check Order Status')
+            check_status_button.grid(column=0,row=0,padx=20)
+
+            #cancel order button
+            cancel_order_button=tk.Button(order_buttons_frame,text='Cancel Order')
+            cancel_order_button.grid(column=2,row=0,padx=20)
+
+            def show_order_detail():
+                pass
+
+       
 
      #login button
     loginButton = tk.Button(login_window, text="Login",command=member_login).grid(row=4, column=0)
@@ -286,6 +338,14 @@ def empty_cart():
     cart_treeview.delete(*cart_treeview.get_children())
     aShop.emptyCart(aShop.guest)
     print(len(aShop.viewCart(aShop.guest)))
+
+def checkout():
+
+    ####To do: change to badrequestError to throw message from controller
+    if aShop.viewCart('guest')==[]:
+        showinfo(title='error',message='Cart is empty')
+    else:    
+        showinfo(title='error', message='Please log in first')
 
 
 #app frame
@@ -408,7 +468,7 @@ sub_total_value_label.grid(column=3,row=2)
 
 
 #checkout button
-checkout_button=tk.Button(cart_frame,text='Checkout')
+checkout_button=tk.Button(cart_frame,text='Checkout',command=checkout)
 checkout_button.grid(column=5,row=2)
 
 
