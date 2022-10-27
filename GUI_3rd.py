@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import ttk,Toplevel
 from functools import partial
 from tkinter.messagebox import showinfo
+from venv import create
 from onlineshop import OnlineShop
 from model.badRequestError import BadRequestError
 
@@ -100,11 +101,101 @@ def member_page():
 
 
         def empty_cart():
-            
             cart_treeview.delete(*cart_treeview.get_children())
             aShop.emptyCart(memberName)
             print(len(aShop.viewCart(memberName)))
             sub_total_value_label.config(text=aShop.getSubTotal(memberName))
+
+        def checkout():
+            member_window.destroy()
+            checkout_window = tk.Tk()
+            checkout_window.title('Checkout Page')
+            checkout_window.geometry("800x1200")
+
+            def createorder():
+                checkout_window.destroy()
+                address_window=tk.Tk()
+                address_window.title('Shipping Address')
+                address_window.geometry('500x800')
+                
+
+
+                # address frame
+                address_frame=tk.Frame(address_window,width=400,height=600)
+                address_frame.grid(column=3,row=0)
+                # enter address label
+                address_label=tk.Label(address_frame,text='Please enter delivery Address')
+                address_label.grid(column=0,row=0,columnspan=4)
+
+                # street label
+                street_label=tk.Label(address_frame,text='Street').grid(column=2,row=1)
+                street_input=tk.StringVar()
+                # street entry
+                street_entry=tk.Entry(address_frame,textvariable=street_input).grid(column=0,row=2,columnspan=4)
+                # suburb labels
+                suburb_label=tk.Label(address_frame,text='Suburb').grid(column=2,row=3)
+                # suburb entry
+                suburb_input=tk.StringVar()
+                suburb_entry=tk.Entry(address_frame,textvariable=suburb_input).grid(column=0,row=4,columnspan=4)
+                # city labels
+                city_label=tk.Label(address_frame,text='City').grid(column=2,row=5)
+                # city entry
+                city_input=tk.StringVar()
+                city_entry=tk.Entry(address_frame,textvariable=city_input).grid(column=0,row=6,columnspan=4)
+                # city labels
+                postcode_label=tk.Label(address_frame,text='Postcode').grid(column=2,row=7)
+                # city entry
+                postcode_input=tk.StringVar()
+                postcode_entry=tk.Entry(address_frame,textvariable=postcode_input).grid(column=0,row=8,columnspan=4)
+
+                def cc_payment():
+                    print(street_input.get())
+                    print(suburb_input.get())
+                    print(city_input.get())
+                    print(postcode_input.get())
+                    aShop.createAddress(street_input.get(),suburb_input.get(),city_input.get(),postcode_input.get())
+
+                def bank_payment():
+                    pass
+                # Credit card payment button
+                CCpayment_button=tk.Button(address_frame,text="Pay by Credit Card",command=cc_payment).grid(column=1,row=9,padx=20,pady=40)
+                # Bank payment button
+                bank_payment_button=tk.Button(address_frame,text='Pay by Bank Account',command=bank_payment).grid(column=3,row=9,padx=20,pady=40)
+                
+
+
+
+            
+            #shopping cart frame
+            cart_frame=tk.Frame(checkout_window)
+            cart_frame.grid(column=0,row=1,columnspan=3,padx=20)
+
+            #shopping cart treeview
+            columns=('item_name','item_quantity','total_price')
+            cart_treeview=ttk.Treeview (cart_frame,columns=columns,show='headings')
+            cart_treeview.heading('item_name',text='Item Name')
+            cart_treeview.heading('item_quantity',text='Quantity')
+            cart_treeview.heading('total_price',text='Total Price')
+            cart_treeview.grid(column=0,row=1,columnspan=3)
+            cartlist=aShop.viewCart(memberName)
+            for item in cartlist:
+                cart_treeview.insert('',tk.END,values=item)
+
+     
+            #sub total label
+            sub_total_label=tk.Label(cart_frame,text='Sub Total')
+            sub_total_label.grid(column=0,row=2)
+
+            #sub total value label
+            sub_total_value_label=tk.Label(cart_frame,text='$0.00',bg='white')
+            sub_total_value_label.grid(column=1,row=2)
+            sub_total_value_label.config(text=aShop.getSubTotal(memberName))
+
+            # create order button
+            create_order_button=tk.Button(cart_frame,text='Create Order',command=createorder)
+            create_order_button.grid(column=2,row=2)
+    
+
 
 
         #app frame
@@ -191,7 +282,7 @@ def member_page():
         cart_label=tk.Label(cart_frame,text='Shopping Cart')
         cart_label.grid(column=1,row=0)
 
-        #shopping cart listbox
+        #shopping cart treeview
         columns=('item_name','item_quantity','total_price')
         cart_treeview=ttk.Treeview (cart_frame,columns=columns,show='headings')
         cart_treeview.heading('item_name',text='Item Name')
@@ -223,7 +314,7 @@ def member_page():
 
 
         #checkout button
-        checkout_button=tk.Button(cart_frame,text='Checkout')
+        checkout_button=tk.Button(cart_frame,text='Checkout',command=checkout)
         checkout_button.grid(column=5,row=2)
 
         #order frame
