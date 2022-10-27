@@ -46,7 +46,7 @@ class OnlineShop:
         self.allMembers: List[Member] = []
         self.allCategories: List[Category] = []
         self.cart=ShoppingCart()
-        self.guest=Guest(self.cart)
+        self.guest=Guest('guest',self.cart)
         self.__initilizerCategory()
         self.__initilizerProduct()
         self.__initilizerUser()
@@ -189,11 +189,19 @@ class OnlineShop:
     def searchProductByCategory(self,pCategory: str) -> Product:
         # Find Products based on a given product category
         prodNameList=[]
+    
         aCategory=self.searchCategory(pCategory)
-        for product in aCategory.getProductList():
-            prodNameList.append(product.productName)
-        return prodNameList        
-   
+        if aCategory==None:
+            raise BadRequestError('Category not found')  
+        else:
+            for product in aCategory.getProductList():
+                prodNameList.append(product.productName)
+            if len(prodNameList)==0:
+                raise BadRequestError('This no product in this Category')
+            else:
+                return prodNameList
+         
+    
         
 
 
@@ -231,8 +239,8 @@ class OnlineShop:
         aProduct=self.searchProductByName(pName)
         # if len(self.allMembers)!=0:        
         aMember=self.searchMember(customerName)
-        print(type(aMember))
-        return aMember.addItem(aProduct)
+        aMember.addItem(aProduct)
+        return True
             
         #     if aMember:
         #         aMember.addItem(aProduct) 
@@ -339,10 +347,10 @@ class OnlineShop:
         # Member use name and password to log in
         for member in self.allMembers:
             if member.memberName==mName and member.memberPassword==mPassword:
-                member.myShoppingCart=self.cart
+                # member.myShoppingCart=self.cart
                 return member
-            else:
-                raise BadRequestError('User name and password does not match')
+        else:
+            raise BadRequestError('User name and password does not match')
                
     
     
@@ -372,7 +380,7 @@ class OnlineShop:
                 return order        
 
 
-aShop=OnlineShop()
+# aShop=OnlineShop()
 # # print(len(aShop.allCategories))
 # # print(len(aShop.allProducts))
 # # print(len(aShop.allCategories[1].productList))
@@ -383,9 +391,13 @@ aShop=OnlineShop()
 # b=aShop.viewAllProducts()
 # print(b)
 
-print(len(aShop.allMembers))
-print(len(aShop.allStaff))
-print(aShop.allMembers[0].memberName)
-print(aShop.allMembers[0].memberPassword)
-print(aShop.guest.guestName)
-print(len(aShop.allCategories))
+# print(len(aShop.allMembers))
+# print(len(aShop.allStaff))
+# print(aShop.allMembers[0].memberName)
+# print(aShop.allMembers[0].memberPassword)
+# print(aShop.guest.guestName)
+# print(len(aShop.allCategories))
+# try:
+#     print(aShop.searchProductByCategory('boo')[0])
+# except Exception as e1:
+#     print(e1)    

@@ -8,7 +8,7 @@ from model.payment import Payment,CCPayment,BankPayment
 class Member(Customer):
     """! The Member Class"""
     nextID = 300
-    def __init__(self,mName: str, mCart , mPhone: str, mEmail: str,mPassword: str):
+    def __init__(self,mName: str, mCart,mPhone: str, mEmail: str,mPassword: str):
         """! The initialiser for Member"""
         self.__userRole='member'
         self.__memberID = Member.nextID
@@ -79,7 +79,7 @@ class Member(Customer):
 
     def __eq__(self,other) -> bool:
         # To compare 2 member objects if they are the same one by email
-        return (self.memberEmail==other.memberEmail)
+        return (self.memberName==other.memberName and self.memberPassword==other.memberPassword)
 
     def __str__(self):
         return self.memberName + ' ' + self.memberPhone + ' ' + self.memberEmail    

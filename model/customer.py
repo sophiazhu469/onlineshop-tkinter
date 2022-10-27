@@ -3,9 +3,9 @@ from model.shoppingCart import ShoppingCart
 
 
 class Customer(User):
-    def __init__(self,cName: str,aCart:ShoppingCart):
+    def __init__(self,aCart:ShoppingCart,cName: str):
         self._myShoppingCart = aCart
-        super.__init__(cName)
+        super().__init__(cName)
 
     @property
     def myShoppingCart(self):
@@ -14,7 +14,7 @@ class Customer(User):
 
     @myShoppingCart.setter
     def myShoppingCart(self,value):
-        self.myShoppingCart=value    
+        self._myShoppingCart=value    
 
     def addItem(self,aProduct):
        return self.myShoppingCart.addItem(aProduct)

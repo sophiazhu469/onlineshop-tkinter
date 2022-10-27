@@ -30,20 +30,18 @@ class ShoppingCart:
 
     def addItem(self,aProduct:Product) -> None:
         # Add an Item Object and quantity of it to the shopping cart
-        anItem=Item(aProduct,1)
-        self.allItems.append(anItem)
-        return (aProduct.productName,str(anItem.quantity),str(anItem.calculateTotal()))
         # anItem=Item(aProduct,1)
-        # if len(self.__allItems)!=0:
-        #     for item in self.__allItems:
-        #         if aProduct.productID==item.itemID:
-        #             item.quantity= item.quantity+1
-
-             
-        # else:
-            
-        #     self.__allItems.append(anItem)
-        #     print('sssss')
+        # self.allItems.append(anItem)
+        # return (aProduct.productName,str(anItem.quantity),str(anItem.calculateTotal()))
+        anItem=Item(aProduct,1)
+        if len(self.__allItems)!=0:
+            for item in self.__allItems:
+                if item.itemProduct==anItem.itemProduct:
+                    item.quantity= item.quantity+1
+                    return True
+            self.__allItems.append(anItem)  
+        else:
+            self.__allItems.append(anItem)
          
       
  

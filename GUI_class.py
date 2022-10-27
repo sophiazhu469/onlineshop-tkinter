@@ -8,6 +8,7 @@ from tkinter import ttk,Toplevel
 from functools import partial
 from tkinter.messagebox import showinfo
 from onlineshop import OnlineShop
+from model.badRequestError import BadRequestError
 
 aShop=OnlineShop()
 
@@ -70,7 +71,10 @@ def login_page():
 
 
             def search_prod_by_category():
-                prod.set(aShop.searchProductByCategory(search_prod_entry.get().lower()))
+                try:
+                    prod.set(aShop.searchProductByCategory(search_prod_entry.get().lower()))
+                except Exception as ex1:   
+                    showinfo(title='error',message=ex1)
 
                 
 
@@ -304,7 +308,11 @@ def search_prod_by_name():
 
 
 def search_prod_by_category():
-    prod.set(aShop.searchProductByCategory(search_prod_entry.get().lower()))
+    try:
+        prod.set(aShop.searchProductByCategory(search_prod_entry.get().lower()))
+    except Exception as ex1:   
+        showinfo(title='error',message=ex1)
+
 
     
 

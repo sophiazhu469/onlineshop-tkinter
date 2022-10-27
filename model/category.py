@@ -7,8 +7,8 @@ class Category:
         self.__productList=[]
         Category.nextID += 1
 
-    def __eq__(self,other):
-        return self.categoryName==other.categoryName
+    # def __eq__(self,other):
+    #     return self.categoryName==other.categoryName
 
     def __str__(self):
         return str(self.__categoryID) + self.__categoryName   

@@ -15,7 +15,7 @@ class Item:
     #     return (self.__itemProduct.productName,str(self.__quantity) ,str(self.calculateTotal()))  
 
     def __eq__(self,other):
-        return self.itemProduct.productName==other.itemProduct.productName   
+        return self.itemProduct==other.itemProduct  
 
     @property
     def itemProduct(self):
