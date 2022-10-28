@@ -11,13 +11,12 @@ class Customer(User):
     def myShoppingCart(self):
         return self._myShoppingCart    
 
-
     @myShoppingCart.setter
     def myShoppingCart(self,value):
         self._myShoppingCart=value    
 
     def addItem(self,aProduct):
-       return self.myShoppingCart.addItem(aProduct)
+        self.myShoppingCart.addItem(aProduct)
 
 
     def removeItem(self,anItem):

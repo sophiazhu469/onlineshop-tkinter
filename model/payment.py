@@ -52,8 +52,6 @@ class CCPayment(Payment):
     def __str__(self):
         return str(self._amount) + ' ' + str(self.__myCardNumber)  
 
-
-
 class BankPayment(Payment):
     """! The Bank Account Payment Class"""
     def __init__(self, amt: float, bnumber: str,bowner):

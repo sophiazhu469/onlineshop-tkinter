@@ -69,9 +69,3 @@ class Staff(User):
  
 
 
-# staff1 = Staff('sophia','dddddd')
-# staff2 = Staff('Rene','12345')
-# print(staff1.staffID)
-# print(staff1.staffName)    
-# print(staff2.staffID)
-# print(staff2.staffName)

@@ -16,21 +16,19 @@ from datetime import date
 aShop=OnlineShop()
 
 
-
+class member_page()
 
   
-# # create root window
-# root = tk.Tk()
-# root.geometry('800x800')
-# root.title('Lincoln Online Shop')
+# create root window
+root = tk.Tk()
+root.geometry('800x800')
+root.title('Lincoln Online Shop')
 
 # Login window
-login_window = tk.Tk()
-
+login_window = tk(root)
 login_window.resizable(False, False)
 # sets the title of the
 login_window.title("Log In")
-
 # sets the geometry of toplevel
 login_window.geometry("600x600")
 
@@ -47,13 +45,12 @@ password = tk.StringVar()
 passwordEntry = tk.Entry(login_window, textvariable=password, show='*').grid(row=3, column=1)  
 
 
-
 def member_page():
-    memberName=username.get()
     print(username.get())
     print(password.get())
-    aMember=aShop.memberLogIn(username.get(),password.get())
-    if aMember:
+    if aShop.memberLogIn(username.get(),password.get()):
+ 
+        aMember=aShop.memberLogIn(username.get(),password.get())
         memberName=username.get()
         print(memberName)
         login_window.destroy()
@@ -61,6 +58,7 @@ def member_page():
         member_window.title('Member Page')
         member_window.geometry("800x1200")
         
+
         def search_prod_by_name():
             prod.set(aShop.searchProductByName(search_prod_entry.get().lower()))
 
@@ -109,7 +107,7 @@ def member_page():
             sub_total_value_label.config(text=aShop.getSubTotal(memberName))
 
         def checkout():
-            # member_window.destroy()
+            member_window.destroy()
             checkout_window = tk.Tk()
             checkout_window.title('Checkout Page')
             checkout_window.geometry("800x1200")
@@ -168,8 +166,6 @@ def member_page():
                         aShop.updateCCPayment(orderAmount,cc_number_input.get(),cc_expired_input.get(),cc_holder_input.get(),CVC_input.get(),aOrder)
                         showinfo(title='success',message='Thank you for your order,Your order number is {}'.format(orderID))
                         cc_payment_window.destroy()
-                        member_page()
-                        aShop.emptyCart(memberName)
                 
                     #cc payment frame
                     cc_payment_frame=tk.Frame(cc_payment_window)
@@ -524,7 +520,7 @@ def guest_page():
                 checkout_window.title('Checkout Page')
                 checkout_window.geometry("800x1200")
 
-                def create_order(memberName):
+                def create_order():
                     checkout_window.destroy()
                     address_window=tk.Tk()
                     address_window.title('Shipping Address')

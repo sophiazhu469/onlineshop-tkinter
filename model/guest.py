@@ -10,8 +10,6 @@ class Guest(Customer):
         # self._myShoppingCart=aCart
         super().__init__(gname,aCart)
       
-    
-
     @property
     def guestName(self):
         return self._userName

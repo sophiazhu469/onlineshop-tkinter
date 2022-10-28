@@ -87,14 +87,15 @@ class OnlineShop:
 
     def guestGetRegistered(self,mName: str, mPhone: str, mEmail: str,mPassword: str) -> str:
         # Guest Registered as a Member, first to check if it is already in the member list
-        aMember=Member(mName,mPhone,mEmail,mPassword)
+        aCart=ShoppingCart()
+        aMember=Member(mName,aCart,mPhone,mEmail,mPassword)
+        aMember.myShoppingCart=self.cart
         for member in self.allMembers:
-            if aMember==member:
-                return False
-                # return 'Member already exist, please log in'
+            if aMember.memberEmail==member.memberEmail:
+                raise BadRequestError ('Member already exist, please log in')
             else:
                 self.allMembers.append(aMember)
-                return True
+                return aMember
      
         
               
@@ -106,7 +107,8 @@ class OnlineShop:
     def createMember(self,cname:str, cphone:str,cemail:str,cpassword:str):
         aCart=ShoppingCart()
         aMember=Member(cname, aCart,cphone,cemail,cpassword)
-        self.allMembers.append(aMember)  
+        self.allMembers.append(aMember)
+        return aMember  
         
 
     # def createGuest(self):
@@ -208,11 +210,15 @@ class OnlineShop:
 
 
     def searchMember(self,memberName):
-        for member in self.allMembers:
-            if member.memberName==memberName:
-                return member
-            else:
-                return self.guest   
+        if memberName=='guest':
+            return self.guest
+        else:    
+            for member in self.allMembers:
+                if member.memberName==memberName:
+                    return member
+        
+
+
 
     def searchStaff(self,staffName):
         for staff in self.allStaff:
@@ -234,7 +240,6 @@ class OnlineShop:
 
 
     def addItem(self, customerName: str ,pName: str) -> str:
-
         # Add a Product to a Member/Guest's shopping Cart,if it is a guest, create a guest object and its shoppingcart
         aProduct=self.searchProductByName(pName)
         # if len(self.allMembers)!=0:        
@@ -268,6 +273,7 @@ class OnlineShop:
 
 
     def viewCart(self,customerName: str ) -> str:
+        print(customerName)
         if customerName != 'guest':
             return self.searchMember(customerName).viewCartDetails()
             
@@ -290,8 +296,9 @@ class OnlineShop:
         print(len(aOrder.allOrderItems),'orderline')
         print(len(aMember.myShoppingCart.allItems),'shoppingcart')
         amount=aOrder.calOrderTotalAmount()
+        orderID=aOrder.orderID
         print("controller:{}".format(amount))
-        return aOrder,amount
+        return aOrder,amount,orderID
 
     def updateDeliveryAddress(self,street,suburb,city,postcode,aOrder:Order):
         anAddress=Address(street,suburb,city,postcode)

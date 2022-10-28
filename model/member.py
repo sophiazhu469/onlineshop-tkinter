@@ -18,6 +18,7 @@ class Member(Customer):
         self.__memberPassword = mPassword
         self.__allMyOrders = []
         self.__myShoppingCart=mCart
+        # super().__init__(mName,mCart)
         Member.nextID += 1
 
     @property
@@ -41,13 +42,26 @@ class Member(Customer):
     def memberPhone(self):
         return self.__memberPhone
 
+    @memberPhone.setter
+    def memberPhone(self,value):
+        self.__memberPhone=value    
+
     @property      
     def memberEmail(self):
         return self.__memberEmail
 
+    @memberEmail.setter
+    def memberEmail(self,value):
+        self.__memberEmail=value
+    
+
     @property
     def memberPassword(self):
         return self.__memberPassword
+
+    @memberPassword.setter
+    def memberPassword(self,value):
+        self.__memberPassword=value      
 
 
     @property
@@ -61,18 +75,11 @@ class Member(Customer):
         self.__myShoppingCart=value
 
 
-    @memberPhone.setter
-    def memberPhone(self,value):
-        self.__memberPhone=value
-
-    @memberEmail.setter
-    def memberEmail(self,value):
-        self.__memberEmail=value
 
 
-    @memberPassword.setter
-    def memberPassword(self,value):
-        self.__memberPassword=value  
+
+
+
 
 
 
