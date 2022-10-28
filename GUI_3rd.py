@@ -4,12 +4,14 @@ from itertools import product
 from re import L
 from tabnanny import check
 import tkinter as tk
-from tkinter import ttk,Toplevel
+from tkinter import StringVar, ttk,Toplevel
 from functools import partial
 from tkinter.messagebox import showinfo
+from typing_extensions import IntVar
 from venv import create
 from onlineshop import OnlineShop
 from model.badRequestError import BadRequestError
+from datetime import date
 
 aShop=OnlineShop()
 
@@ -51,7 +53,6 @@ def member_page():
     if aShop.memberLogIn(username.get(),password.get()):
  
         aMember=aShop.memberLogIn(username.get(),password.get())
-        print(aMember)
         memberName=username.get()
         print(memberName)
         login_window.destroy()
@@ -112,13 +113,16 @@ def member_page():
             checkout_window.title('Checkout Page')
             checkout_window.geometry("800x1200")
 
-            def createorder():
+            def create_order():
                 checkout_window.destroy()
                 address_window=tk.Tk()
                 address_window.title('Shipping Address')
                 address_window.geometry('500x800')
-                
-
+                orderDetails=aShop.placeOrder(date.today(),memberName)
+                aOrder=orderDetails[0]
+                orderAmount=orderDetails[1]
+                print(aOrder)
+                print("orderAmount:{}".format(orderAmount))
 
                 # address frame
                 address_frame=tk.Frame(address_window,width=400,height=600)
@@ -149,14 +153,94 @@ def member_page():
                 postcode_entry=tk.Entry(address_frame,textvariable=postcode_input).grid(column=0,row=8,columnspan=4)
 
                 def cc_payment():
-                    print(street_input.get())
-                    print(suburb_input.get())
-                    print(city_input.get())
                     print(postcode_input.get())
-                    aShop.createAddress(street_input.get(),suburb_input.get(),city_input.get(),postcode_input.get())
+                    anAddress=aShop.updateDeliveryAddress(street_input.get(),suburb_input.get(),city_input.get(),postcode_input.get(),aOrder)
+                    print(anAddress)
+                    print(aOrder)
+                    address_window.destroy()
+                    cc_payment_window=tk.Tk()
+                    cc_payment_window.title('Credit Card Payment')
+                    cc_payment_window.geometry('400x400')
+                    
+                    def confirm_payment():
+                        print(cc_number_input.get())
+                        print(cc_expired_input.get())
+                        print(cc_holder_input.get())
+                        print(CVC_input.get())
+                        aCCPayment=aShop.updateCCPayment(orderAmount,cc_number_input.get(),cc_expired_input.get(),cc_holder_input.get(),CVC_input.get(),aOrder)
+                        print(aCCPayment)
+                
+                    #cc payment frame
+                    cc_payment_frame=tk.Frame(cc_payment_window)
+                    cc_payment_frame.grid(column=0,row=0,columnspan=3)
+
+                    # cc payment amount label
+                    cc_payment_label=tk.Label(cc_payment_frame,text='Payment Amount:{}'.format(orderAmount))
+                    cc_payment_label.grid(column=1,row=1,columnspan=3)
+
+                    # cc number label and entry
+                    cc_number_label=tk.Label(cc_payment_frame,text='Card Number').grid(column=1,row=2)
+                    cc_number_input=StringVar()
+                    cc_number_entry=tk.Entry(cc_payment_frame,textvariable=cc_number_input).grid(column=1,row=3)
+
+                    # cc expired date label and entry
+                    cc_expired_label=tk.Label(cc_payment_frame,text='Expired Date').grid(column=1,row=4)
+                    cc_expired_input=StringVar()
+                    cc_expired_entry=tk.Entry(cc_payment_frame,textvariable=cc_expired_input).grid(column=1,row=5)
+
+                    # cc holder label and entry
+                    cc_holder_label=tk.Label(cc_payment_frame,text='Card Holder').grid(column=1,row=6)
+                    cc_holder_input=tk.StringVar()
+                    cc_holder_entry=tk.Entry(cc_payment_frame,textvariable=cc_holder_input).grid(column=1,row=7)
+
+                    # CVC label and entry
+                    CVC_label=tk.Label(cc_payment_frame,text="CVC").grid(column=1,row=8)
+                    CVC_input=StringVar()
+                    CVC_entry=tk.Entry(cc_payment_frame,textvariable=CVC_input).grid(column=1,row=9)
+
+                    #confirm payment button
+                    confirm_payment_button=tk.Button(cc_payment_frame,text='Confirm Payment',command=confirm_payment).grid(column=1,row=10)
+
 
                 def bank_payment():
-                    pass
+                    aShop.updateDeliveryAddress(street_input.get(),suburb_input.get(),city_input.get(),postcode_input.get(),aOrder)
+                    address_window.destroy()
+                    bank_payment_window=tk.Tk()
+                    bank_payment_window.title('Bank Payment')
+                    bank_payment_window.geometry('400x400')
+                    
+                    def confirm_payment():
+                        print(bank_number_input.get())
+                      
+                        print(bank_holder_input.get())
+                       
+                        aCCPayment=aShop.updateBankPayment(orderAmount,bank_number_input.get(),bank_holder_input.get(),aOrder)
+                        print(aCCPayment)
+                
+                    # bank payment frame
+                    bank_payment_frame=tk.Frame(bank_payment_window)
+                    bank_payment_frame.grid(column=0,row=0,columnspan=3)
+
+                    # bank  payment amount label
+                    bank_payment_label=tk.Label(bank_payment_frame,text='Payment Amount:{}'.format(orderAmount))
+                    bank_payment_label.grid(column=1,row=1,columnspan=3)
+
+                    # cc number label and entry
+                    bank_number_label=tk.Label(bank_payment_frame,text='Bank Account Number').grid(column=1,row=2)
+                    bank_number_input=StringVar()
+                    bank_number_entry=tk.Entry(bank_payment_frame,textvariable=bank_number_input).grid(column=1,row=3)
+
+                    # bank holder label and entry
+                    bank_holder_label=tk.Label(bank_payment_frame,text='Account Owner').grid(column=1,row=4)
+                    bank_holder_input=tk.StringVar()
+                    bank_holder_entry=tk.Entry(bank_payment_frame,textvariable=bank_holder_input).grid(column=1,row=5)
+
+
+
+                    #confirm payment button
+                    confirm_payment_button=tk.Button(bank_payment_frame,text='Confirm Payment',command=confirm_payment).grid(column=1,row=6)
+
+
                 # Credit card payment button
                 CCpayment_button=tk.Button(address_frame,text="Pay by Credit Card",command=cc_payment).grid(column=1,row=9,padx=20,pady=40)
                 # Bank payment button
@@ -192,7 +276,7 @@ def member_page():
             sub_total_value_label.config(text=aShop.getSubTotal(memberName))
 
             # create order button
-            create_order_button=tk.Button(cart_frame,text='Create Order',command=createorder)
+            create_order_button=tk.Button(cart_frame,text='Create Order',command=create_order)
             create_order_button.grid(column=2,row=2)
     
 

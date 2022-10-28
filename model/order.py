@@ -106,5 +106,5 @@ class Order:
 
     def __str__(self) -> str:
         # To display order details
-        return 'Order Number: '+ self.orderID + '\nOrder Date:' + self.dateCreated +'\nOrder Member: '+ \
-        self.orderMember.memberName + '\nOrder Amount: $'+ self.orderPayment.amount + 'Order Status: ' + self.orderStatus
+        return 'Order Number: '+ str(self.orderID) + '\nOrder Date:' + str(self.dateCreated) +'\nOrder Member: '+ \
+        self.orderMember.memberName + '\nOrder Amount: $'+ str(self.calOrderTotalAmount()) + '\nOrder Status: ' + self.orderStatus

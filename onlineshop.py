@@ -281,15 +281,33 @@ class OnlineShop:
     def checkout(self,mName):
         pass
     
-    def placeOrder(self,memberID:int, dateCreated: date) -> str:
+    def placeOrder(self,dateCreated: date,memberName:str, ) -> str:
         # Create a Order Object and append it to the member's Order List
         # First to use the cName to check if it is a member, if yes, create a Order Object,also create a Payment Object,a Address Objects,if billing and delivery not the same, 2 address objects
         # Also, need to call shopping cart checkout function to clear the shopping cart
-        for member in self.allMembers:
-            if member.memberID==memberID:
-                aMember=member
+        aMember=self.searchMember(memberName)
         aOrder=Order(dateCreated,aMember)
-        return True
+        print(len(aOrder.allOrderItems),'orderline')
+        print(len(aMember.myShoppingCart.allItems),'shoppingcart')
+        amount=aOrder.calOrderTotalAmount()
+        print("controller:{}".format(amount))
+        return aOrder,amount
+
+    def updateDeliveryAddress(self,street,suburb,city,postcode,aOrder:Order):
+        anAddress=Address(street,suburb,city,postcode)
+        aOrder.deliveryAddress=anAddress
+        return anAddress
+
+    def updateCCPayment(self,amount,ccNumber,ccExpired,ccHolder,CVC,aOrder:Order):
+        aCCPayment=CCPayment(amount,ccNumber,ccExpired,ccHolder,CVC)
+        aOrder.orderPayment=aCCPayment
+        return aCCPayment
+
+    def updateBankPayment(self,amount,bankNumber,accountOwner,aOrder:Order):
+        aBankPayment=BankPayment(amount,bankNumber,accountOwner)
+        aOrder.orderPayment=aBankPayment
+        return True    
+            
 
 
     def cancelOrder(self, orderID:int, memberID:int ) -> str:
