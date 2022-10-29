@@ -275,8 +275,7 @@ def member_page():
             create_order_button=tk.Button(cart_frame,text='Create Order',command=create_order)
             create_order_button.grid(column=2,row=2)
     
-
-
+            
 
         #app frame
         app_frame=tk.Frame(member_window,relief=tk.FLAT,borderwidth=3)
@@ -453,6 +452,7 @@ def guest_page():
     guest_window=tk.Tk()
     guest_window.title('Lincoln Online Shop')
     guest_window.geometry("800x1000")
+
 
      
    
@@ -834,15 +834,85 @@ def guest_page():
     checkout_button.grid(column=5,row=2)
 
 def staff_page():
-    if aShop.staffLogIn(username.get(),password.get()):
-        aStaff=aShop.staffLogIn(username.get(),password.get())
+    aStaff=aShop.staffLogIn(username.get(),password.get())
+    if aStaff:
         print(aStaff)
         staffName=username.get()
-        print(staffName)
         login_window.destroy()
         staff_window = tk.Tk()
         staff_window.title('Staff Page')
         staff_window.geometry("600x1200")
+        
+        #Staff Page label
+        staff_label=tk.Label(staff_window,text='Staff Management System').grid(column=0,row=1,columnspan=2,pady=20)
+
+        #orders frame
+        order_frame=tk.Frame(staff_window)
+        order_frame.grid(column=0,row=2,columnspan=2,padx=20)
+
+        #orders Label
+        order_label=tk.Label(staff_window,text='All Orders')
+
+        #Order Details treeview
+        columns=('order_ID','member_name','order_date','order_status','amount')
+        order_treeview=ttk.Treeview (order_frame,columns=columns,show='headings')
+        order_treeview.heading('order_ID',text='Order ID')
+        order_treeview.heading('member_name',text='Member Name')
+        order_treeview.heading('order_date',text='Order Date')
+        order_treeview.heading('order_status',text='Order Status')
+        order_treeview.heading('amount',text='Amount')
+        order_treeview.grid(column=0,row=1,columnspan=2)
+        orderlist=aShop.staffViewOrders(staffName)
+        for item in orderlist:
+            order_treeview.insert('',tk.END,values=item)
+        
+        # Order Status options
+        order_status_options=['processing', 'awaiting shipment', 'shipped', 'delivered','Cancelled']
+        order_status=tk.StringVar()
+        order_status.set('select new order status')
+        status_option=tk.OptionMenu(order_frame,order_status,*order_status_options).grid(column=0,row=5)
+
+        # Update Order Status button
+        update_status_button=tk.Button(order_frame,text='Update Order Status').grid(column=1,row=5,pady=30)
+
+
+        #report frame
+        report_frame=tk.Frame(staff_window).grid(column=0,row=7,columnspan=2)
+
+        # options month for report
+        OPTIONS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
+        report_month = StringVar()
+        report_month.set(OPTIONS[0]) # default value
+
+        select_month_option = tk.OptionMenu(report_frame, report_month, *OPTIONS).grid(column=0,row=10)
+
+
+        #Order Details treeview
+        columns=('order_ID','member_name','order_date','order_status','amount')
+        order_treeview=ttk.Treeview (report_frame,columns=columns,show='headings')
+        order_treeview.heading('order_ID',text='Order ID')
+        order_treeview.heading('member_name',text='Member Name')
+        order_treeview.heading('order_date',text='Order Date')
+        order_treeview.heading('order_status',text='Order Status')
+        order_treeview.heading('amount',text='Amount')
+        order_treeview.grid(column=0,row=8,columnspan=2)
+        orderlist=aShop.staffViewOrders(staffName)
+        for item in orderlist:
+            order_treeview.insert('',tk.END,values=item)
+
+
+         # generate report button
+        genreport_button=tk.Button(report_frame,text='Generate Report').grid(column=1,row=10)   
+
+
+
+
+            
+
+
+
+
+
 
 
 

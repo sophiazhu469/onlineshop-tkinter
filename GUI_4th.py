@@ -16,7 +16,6 @@ from datetime import date
 aShop=OnlineShop()
 
 
-class member_page()
 
   
 # create root window

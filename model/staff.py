@@ -1,9 +1,10 @@
 from model.user import User
 from datetime import date
+from model.order import Order
 
 # The Staff Class
 class Staff(User):
-    allCustomerOrders=[]
+    allCustomerOrders:list[Order]=[]
     nextID = 100
     def __init__(self, sName: str, sPassword: str):
         self.__userRole='staff'
@@ -34,6 +35,10 @@ class Staff(User):
     def staffPassword(self,value):
         self.__staffPassword=value
 
+
+
+    def __str__(self):
+        return self.staffName
     
     def __eq__(self,other):
         return (self.staffName,self.staffPassword)==(other.staffName,other.staffPassword)
@@ -45,8 +50,10 @@ class Staff(User):
 
 
     def staffViewOrders(self):
+        orderDetailsList=[]
         for order in self.allCustomerOrders:
-            return order
+            orderDetailsList.append(order.showOrderDetails())
+        return orderDetailsList
 
     def updateOrderStatus(self,orderID: int ,value):
         for order in self.allCustomerOrders:

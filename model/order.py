@@ -102,7 +102,8 @@ class Order:
         # assume shipping cost is $5    
         return totalAmount + 5  
             
-        
+    def showOrderDetails(self):
+        return (self.orderID,self.orderMember.memberName,self.dateCreated,self.orderStatus,self.calOrderTotalAmount()) 
 
     def __str__(self) -> str:
         # To display order details
