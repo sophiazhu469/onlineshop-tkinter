@@ -32,19 +32,19 @@ login_window.resizable(False, False)
 login_window.title("Log In")
 
 # sets the geometry of toplevel
-login_window.geometry("600x600")
+login_window.geometry("600x400")
 
-tk.Label(login_window,text ="Please enter your user name and password to login").grid(row=0,column=1)
+tk.Label(login_window,text ="Please enter your user name and password to login").grid(row=0,column=1,pady=40)
 
 #username label and text entry box
 usernameLabel = tk.Label(login_window, text="User Name").grid(row=2, column=0)
 username = tk.StringVar()
-usernameEntry = tk.Entry(login_window, textvariable=username).grid(row=2, column=1)  
+usernameEntry = tk.Entry(login_window, textvariable=username).grid(row=2, column=1,columnspan=2)  
 
 #password label and password entry box
 passwordLabel = tk.Label(login_window,text="Password").grid(row=3, column=0)  
 password = tk.StringVar()
-passwordEntry = tk.Entry(login_window, textvariable=password, show='*').grid(row=3, column=1)  
+passwordEntry = tk.Entry(login_window, textvariable=password, show='*').grid(row=3, column=1,columnspan=2,pady=40)  
 
 
 
@@ -62,7 +62,7 @@ def member_page():
         member_window.geometry("800x1200")
         
         def search_prod_by_name():
-            prod.set(aShop.searchProductByName(search_prod_entry.get().lower()))
+            prod.set(aShop.searchProductByName2(search_prod_entry.get().lower()))
 
 
         def search_prod_by_category():
@@ -262,6 +262,7 @@ def member_page():
                 cart_treeview.insert('',tk.END,values=item)
 
      
+
             #sub total label
             sub_total_label=tk.Label(cart_frame,text='Sub Total')
             sub_total_label.grid(column=0,row=2)
@@ -271,19 +272,78 @@ def member_page():
             sub_total_value_label.grid(column=1,row=2)
             sub_total_value_label.config(text=aShop.getSubTotal(memberName))
 
+                #delivery cost label
+            delivery_cost_label=tk.Label(cart_frame,text='Delivery Cost').grid(column=0,row=3)
+
+            #shipping cost value label
+            ship_cost_label=tk.Label(cart_frame,text='$5.0').grid(column=1,row=3)
+
             # create order button
             create_order_button=tk.Button(cart_frame,text='Create Order',command=create_order)
-            create_order_button.grid(column=2,row=2)
+            create_order_button.grid(column=2,row=3)
     
+        def order_history():
+            order_history_window = tk.Tk()
+            order_history_window.title('Order History Page')
+            order_history_window.geometry("800x1200")
+
+
+            #order history frame
+            order_frame=tk.Frame(order_history_window)
+            order_frame.grid(column=0,row=1)
+
+            #order history label
+            order_history_label=tk.Label(order_frame,text='My Orders')
+            order_history_label.grid(column=0,row=0)
+                
+            #Order Details treeview
+            columns=('order_ID','order_date','order_status','amount')
+            order_treeview=ttk.Treeview (order_frame,columns=columns,show='headings')
+            order_treeview.heading('order_ID',text='Order ID')
+            order_treeview.heading('order_date',text='Order Date')
+            order_treeview.heading('order_status',text='Order Status')
+            order_treeview.heading('amount',text='Amount')
+            order_treeview.grid(column=0,row=1,columnspan=2)
+            orderlist=aShop.memberViewAllOrders(memberName)
+            for item in orderlist:
+                order_treeview.insert('',tk.END,values=item)
+
             
+            # def show_order_detail():
+            #     pass
+            
+            def cancel_order():
+                selected_order=order_treeview.selection()[0]
+                orderID=order_treeview.item(selected_order)['values'][0]
+                if not selected_order:
+                    showinfo(title='Alert',message='Please select a Order')
+                info=aShop.cancelOrder(orderID,memberName)
+                showinfo(message=info)
+     
+
+
+            # # view order details button
+            # view_order_details_button=tk.Button(order_frame,text='View Order',command=show_order_detail)
+            # view_order_details_button.grid(column=0,row=2)
+
+            #cancel order button
+            cancel_order_button=tk.Button(order_frame,text='Cancel Order',command=cancel_order)
+            cancel_order_button.grid(column=1,row=2)
+
+
+
+
 
         #app frame
         app_frame=tk.Frame(member_window,relief=tk.FLAT,borderwidth=3)
-        app_frame.grid(column=0,row=0,sticky=tk.N,padx=(100,0))
+        app_frame.grid(column=0,row=0,columnspan=4)
 
         #app label
         app_label=tk.Label(app_frame,text='Welcome Back, {}'.format(memberName))
         app_label.grid(column=1, row=0, pady=10)
+
+        # Order History button
+        order_history_button=tk.Button(app_frame,text='Order History',command=order_history).grid(column=3,row=0,padx=10)
 
         #nav frame
         nav_frame=tk.Frame(member_window)
@@ -291,7 +351,7 @@ def member_page():
 
         #view product button
         view_prod_button=tk.Button(nav_frame,text=' Search Product By Category',command=search_prod_by_category)
-        view_prod_button.grid(column=0,row=1,padx=20)
+        view_prod_button.grid(column=0,row=1,padx=25)
 
         #search product entry
         product_input=tk.StringVar()
@@ -355,11 +415,11 @@ def member_page():
 
         #shopping cart frame
         cart_frame=tk.Frame(member_window)
-        cart_frame.grid(column=0,row=3,columnspan=2)
+        cart_frame.grid(column=0,row=3,columnspan=4,padx=20)
 
         # shopping cart label
         cart_label=tk.Label(cart_frame,text='Shopping Cart')
-        cart_label.grid(column=1,row=0)
+        cart_label.grid(column=2,row=0)
 
         #shopping cart treeview
         columns=('item_name','item_quantity','total_price')
@@ -381,71 +441,21 @@ def member_page():
         empty_cart_button=tk.Button(cart_frame,text='Empty Cart',command=empty_cart)
         empty_cart_button.grid(column=1,row=2)
 
+        #checkout button
+        checkout_button=tk.Button(cart_frame,text='Checkout',command=checkout)
+        checkout_button.grid(column=2,row=2)
+
+        
         #sub total label
         sub_total_label=tk.Label(cart_frame,text='Sub Total')
-        sub_total_label.grid(column=2,row=2)
+        sub_total_label.grid(column=1,row=3)
 
         #sub total value label
         sub_total_value_label=tk.Label(cart_frame,text='$0.00',bg='white')
-        sub_total_value_label.grid(column=3,row=2)
+        sub_total_value_label.grid(column=2,row=3)
         sub_total_value_label.config(text=aShop.getSubTotal(memberName))
 
 
-
-        #checkout button
-        checkout_button=tk.Button(cart_frame,text='Checkout',command=checkout)
-        checkout_button.grid(column=5,row=2)
-
-        #order frame
-        order_frame=tk.Frame(member_window)
-        order_frame.grid(column=0,row=4)
-
-        #order history label
-        order_history_label=tk.Label(order_frame,text='Orders')
-        order_history_label.grid(column=0,row=0)
-        
-            #Order Listbox
-        order=tk.StringVar(value=aShop.memberViewAllOrders(memberName))
-
-        order_listbox=tk.Listbox(order_frame,listvariable=order,exportselection=False)
-        order_listbox.grid(column=0,row=1)
-
-    
-
-        # # view order details button
-        # view_order_details_button=tk.Button(order_frame,text='View Order',command=show_order_detail)
-        # view_order_details_button.grid(column=1,row=2)
-
-        # Order details frame
-        order_detail_frame=tk.Frame(member_window)
-        order_detail_frame.grid(column=1,row=4)
-
-        # Order detail Label
-        order_detail_label = tk.Label(order_detail_frame,text='Order Detail')
-        # all_prod_label.pack(side=tk.TOP)
-        order_detail_label.grid(column=1,row=0)
-
-
-        #order detail display label
-        order__detail_label2=tk.Label(order_detail_frame,text='Select a order to view status\n')
-        order__detail_label2.grid(column=1,row=1)
-
-
-
-        #order buttons frame
-        order_buttons_frame=tk.Frame(member_window)
-        order_buttons_frame.grid(column=0,row=5,columnspan=2)
-
-        #check order status button
-        check_status_button=tk.Button(order_buttons_frame,text='Check Order Status')
-        check_status_button.grid(column=0,row=0,padx=20)
-
-        #cancel order button
-        cancel_order_button=tk.Button(order_buttons_frame,text='Cancel Order')
-        cancel_order_button.grid(column=2,row=0,padx=20)
-
-        def show_order_detail():
-            pass
 
 def guest_page():
     login_window.destroy()
@@ -457,7 +467,7 @@ def guest_page():
      
    
     def search_prod_by_name():
-            prod.set(aShop.searchProductByName(search_prod_entry.get().lower()))
+            prod.set(aShop.searchProductByName2(search_prod_entry.get().lower()))
 
 
     def search_prod_by_category():
@@ -524,7 +534,7 @@ def guest_page():
                 checkout_window.title('Checkout Page')
                 checkout_window.geometry("800x1200")
 
-                def create_order(memberName):
+                def create_order():
                     checkout_window.destroy()
                     address_window=tk.Tk()
                     address_window.title('Shipping Address')
@@ -792,7 +802,7 @@ def guest_page():
 
     #shopping cart frame
     cart_frame=tk.Frame(guest_window)
-    cart_frame.grid(column=0,row=3,columnspan=2)
+    cart_frame.grid(column=0,row=3,columnspan=4,padx=20)
 
     # shopping cart label
     cart_label=tk.Label(cart_frame,text='Shopping Cart')
@@ -818,20 +828,22 @@ def guest_page():
     empty_cart_button=tk.Button(cart_frame,text='Empty Cart',command=empty_cart)
     empty_cart_button.grid(column=1,row=2)
 
+    #checkout button
+    checkout_button=tk.Button(cart_frame,text='Checkout',command=checkout)
+    checkout_button.grid(column=2,row=2)
+
     #sub total label
     sub_total_label=tk.Label(cart_frame,text='Sub Total')
-    sub_total_label.grid(column=2,row=2)
+    sub_total_label.grid(column=1,row=3)
 
     #sub total value label
     sub_total_value_label=tk.Label(cart_frame,text='$0.00',bg='white')
-    sub_total_value_label.grid(column=3,row=2)
+    sub_total_value_label.grid(column=2,row=3)
     sub_total_value_label.config(text=aShop.getSubTotal('guest'))
 
 
 
-    #checkout button
-    checkout_button=tk.Button(cart_frame,text='Checkout',command=checkout)
-    checkout_button.grid(column=5,row=2)
+
 
 def staff_page():
     aStaff=aShop.staffLogIn(username.get(),password.get())
@@ -919,12 +931,12 @@ def staff_page():
 
 
 # Member login button
-login_button = tk.Button(login_window, text="Member Login",command=member_page).grid(row=4, column=0,padx=30)   
+login_button = tk.Button(login_window, text="Member Login",command=member_page).grid(row=4, column=0,padx=5)   
 
 #Staff login Button
-staff_login_button=tk.Button(login_window,text='Staff Login',command=staff_page).grid(row=4,column=1,padx=30)
+staff_login_button=tk.Button(login_window,text='Staff Login',command=staff_page).grid(row=4,column=1)
 # Guest view button
-guest_view_button=tk.Button(login_window, text="Shop as a Guest",command=guest_page).grid(row=4, column=2,padx=30)
+guest_view_button=tk.Button(login_window, text="Shop as a Guest",command=guest_page).grid(row=4, column=2)
 
  
     # def validation():

@@ -1,4 +1,4 @@
-from multiprocessing.spawn import import_main_path
+
 from product import Product
 from item import Item
 from shoppingCart import ShoppingCart

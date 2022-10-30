@@ -187,6 +187,13 @@ class OnlineShop:
                 return product
 
 
+    def searchProductByName2(self,pName: str):
+        # Find Product based on a given product name
+        for product in self.allProducts:
+            if product.productName==pName:
+                return product.productName            
+
+
 
     def searchProductByCategory(self,pCategory: str) -> Product:
         # Find Products based on a given product category
@@ -238,6 +245,11 @@ class OnlineShop:
             if product.productName==pName:
                 return product
 
+    def displayProducts(self):
+        allProducts=[]
+        for product in self.allProducts:
+            allProducts.append(product.displayProduct())
+        return allProducts
 
     def addItem(self, customerName: str ,pName: str) -> str:
         # Add a Product to a Member/Guest's shopping Cart,if it is a guest, create a guest object and its shoppingcart
@@ -284,8 +296,7 @@ class OnlineShop:
         aMember=self.searchMember(customerName)
         return '$'+str(aMember.myShoppingCart.getTotalSum())
     
-    def checkout(self,mName):
-        pass
+ 
     
     def placeOrder(self,dateCreated: date,memberName:str, ) -> str:
         # Create a Order Object and append it to the member's Order List
@@ -317,19 +328,14 @@ class OnlineShop:
             
 
 
-    def cancelOrder(self, orderID:int, memberID:int ) -> str:
+    def cancelOrder(self, orderID:int, memberName:str ) -> str:
         # Cancel order if order status is processing, awaiting shipment
-        for member in self.allMembers:
-            if member.memberID==memberID:
-                aMember=member
-        for order in aMember.allMyOrders:
-            if order.orderID==orderID:
-                aOrder=order
+        aMember=self.searchMember(memberName)
+        aOrder=aMember.searchOrder(orderID)
         if aOrder.orderStatus in ['processing','awaiting shipment']:
             aOrder.orderStatus='cancelled'
             message=f'Order has been cancelled'
-            return message
-            
+            return message     
         else:
             message=f'Order has been shipped or delivered,cannot be cancelled'
             return message              
@@ -345,11 +351,13 @@ class OnlineShop:
                 return False    
 
 
-    def memberViewAllOrders(self,memberID:int ) -> str:
+    def memberViewAllOrders(self,memberName:str ) -> str:
         # Member view all his order history
         for member in self.allMembers:
-            if member.memberID==memberID:
-                return member.allMyOrders
+            if member.memberName==memberName:
+                return member.viewAllMyOrders()
+
+         
 
     # def checkOrderStatus(self,memberID:int ) -> str:
     #     """! Member to check a Order status

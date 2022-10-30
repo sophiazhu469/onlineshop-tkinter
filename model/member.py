@@ -104,10 +104,15 @@ class Member(Customer):
 
     def viewAllMyOrders(self):
         # Display all Orders for this Member
+        myOrderList=[]
         for order in self.allMyOrders:
-            return order
+            myOrderList.append((order.orderID,order.dateCreated,order.orderStatus,order.calOrderTotalAmount()))
+        return myOrderList
              
-
+    def searchOrder(self,orderID):
+        for order in self.allMyOrders:
+            if order.orderID==orderID:
+                return order
     
     def addOrder(self,aOrder) :
         # Add order to member's order list

@@ -2,6 +2,7 @@ from datetime import date
 from model.member import Member
 from model.address import Address
 from model.payment import Payment
+from model.shoppingCart import ShoppingCart
 
 class Order:
     """! The Order Class"""
@@ -103,7 +104,15 @@ class Order:
         return totalAmount + 5  
             
     def showOrderDetails(self):
-        return (self.orderID,self.orderMember.memberName,self.dateCreated,self.orderStatus,self.calOrderTotalAmount()) 
+        return (self.orderID,self.orderMember.memberName,self.dateCreated,self.orderStatus,self.calOrderTotalAmount())
+
+
+    def showOrderLine(self):
+        itemList=[]
+        for item in self.allOrderItems:
+            itemList.append((item.itemProduct.productName,item.quantity,item.calculateTotal()))
+        return itemList
+
 
     def __str__(self) -> str:
         # To display order details

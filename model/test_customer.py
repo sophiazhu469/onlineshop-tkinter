@@ -1,4 +1,10 @@
 from customer import Customer
+from shoppingCart import ShoppingCart
+import sys
+import os.path
+
+sys.path.append(os.path.join(os.path.dirname(__file__),os.path.pardir))
+
 
 def test_addItem():
     pass
