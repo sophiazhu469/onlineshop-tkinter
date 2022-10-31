@@ -29,8 +29,7 @@ class Customer(User):
     def emptyCart(self):
         self.myShoppingCart.emptyCart()    
 
-    def checkOut(self) -> None:
-        self.myShoppingCart=[]    
+
 
 
 

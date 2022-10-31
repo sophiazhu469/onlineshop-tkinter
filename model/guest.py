@@ -19,9 +19,7 @@ class Guest(Customer):
         return self._myShoppingCart   
 
     def register(self,mName,mPhone,mEmail,mPassword):
-        aMember=Member(mName,mPhone,mEmail,mPassword)
+        aMember=Member(mName,self.myShoppingCart,mPhone,mEmail,mPassword)
         return aMember
 
-# aCart=ShoppingCart()
-# aGuest=Guest(aCart,'guest')
-# print(aGuest.guestName)
+

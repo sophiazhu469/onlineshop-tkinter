@@ -68,5 +68,5 @@ class Product:
 
 
     def displayProduct(self):
-        return self.productName + '$' + str(self.productPrice)
+        return self.productName + ':$' + str(self.productPrice)
       

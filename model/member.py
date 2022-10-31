@@ -76,14 +76,6 @@ class Member(Customer):
 
 
 
-
-
-
-
-
-
-
-
     def __eq__(self,other) -> bool:
         # To compare 2 member objects if they are the same one by email
         return (self.memberName==other.memberName and self.memberPassword==other.memberPassword)
