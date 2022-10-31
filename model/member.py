@@ -10,7 +10,7 @@ class Member(Customer):
     nextID = 300
     def __init__(self,mName: str, mCart,mPhone: str, mEmail: str,mPassword: str):
         """! The initialiser for Member"""
-        self.__userRole='member'
+        # self.__userRole='member'
         self.__memberID = Member.nextID
         self.__memberName=mName
         self.__memberPhone = mPhone
@@ -21,9 +21,9 @@ class Member(Customer):
         # super().__init__(mName,mCart)
         Member.nextID += 1
 
-    @property
-    def userRole(self):
-        return self.__userRole
+    # @property
+    # def userRole(self):
+    #     return self.__userRole
 
     @property
     def myShoppingCart(self):
@@ -91,9 +91,6 @@ class Member(Customer):
             return False
           
 
-
-
-
     def viewAllMyOrders(self):
         # Display all Orders for this Member
         myOrderList=[]
@@ -132,5 +129,6 @@ class Member(Customer):
         aPayment=Payment(amount)
         
 
-    def addDeliveryAddress(self,address):
-        self.order.deliveryAddress=address
+    def addDeliveryAddress(self,address,orderID):
+        aOrder=self.searchOrder(orderID)
+        aOrder.deliveryAddress=address
