@@ -35,6 +35,9 @@ def test_set_constructor():
     # after pass item to orderline, shopping cart clear and become empty
     assert len(aMember.myShoppingCart.allItems)==0
 
+def test_orderPayment():
+    aPayment=()
+
 def test_showOrderLine():
     assert aOrder.showOrderLine()==[('It',2,50.0),("Dune",1,28.0)]
 

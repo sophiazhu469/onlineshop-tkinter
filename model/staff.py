@@ -7,16 +7,16 @@ class Staff(User):
     allCustomerOrders:list[Order]=[]
     nextID = 100
     def __init__(self, sName: str, sPassword: str):
-        self.__userRole='staff'
+        # self.__userRole='staff'
         self.__staffPassword = sPassword
         self.__staffName=sName
         self.__staffID = Staff.nextID
         Staff.nextID += 1
 
     
-    @property
-    def userRole(self):
-        return self.__userRole
+    # @property
+    # def userRole(self):
+    #     return self.__userRole
         
     @property
     def staffID(self):
@@ -58,14 +58,16 @@ class Staff(User):
     def updateOrderStatus(self,orderID: int ,value):
         for order in self.allCustomerOrders:
             if orderID==order.orderID:
-                order.orderStautus=value
+                order.orderStatus=value
 
         
     
     def generateOrderReport(self,startDate: date, endDate:date ):
+        orderList=[]
         for order in self.allCustomerOrders:
             if order.dateCreated>= startDate and order.dateCreated<= endDate:
-                return order
+                orderList.append(order.showOrderDetails())
+        return orderList        
 
     def staffLogIn(self,staffName: str, sPassword: str) -> str :
         if self.staffName==staffName and self.staffPassword==sPassword:
