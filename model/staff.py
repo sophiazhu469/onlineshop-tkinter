@@ -4,7 +4,7 @@ from model.order import Order
 
 # The Staff Class
 class Staff(User):
-    allCustomerOrders:list[Order]=[]
+    allCustomerOrders=[]
     nextID = 100
     def __init__(self, sName: str, sPassword: str):
         # self.__userRole='staff'

@@ -214,8 +214,6 @@ class OnlineShop:
         
 
 
-
-
     def searchMember(self,memberName):
         if memberName=='guest':
             return self.guest
@@ -232,7 +230,8 @@ class OnlineShop:
             if staff.staffName==staffName:
                 return staff
             else:
-                return None    
+                return None
+
 
     def viewAllProducts(self) -> str:
         productList=[]
@@ -332,8 +331,9 @@ class OnlineShop:
         # Cancel order if order status is processing, awaiting shipment
         aMember=self.searchMember(memberName)
         aOrder=aMember.searchOrder(orderID)
-        if aOrder.orderStatus in ['processing','awaiting shipment']:
-            aOrder.orderStatus='cancelled'
+        if aMember.cancelOrder(aOrder):
+        # if aOrder.orderStatus in ['processing','awaiting shipment']:
+        #     aOrder.orderStatus='cancelled'
             message=f'Order has been cancelled'
             return message     
         else:

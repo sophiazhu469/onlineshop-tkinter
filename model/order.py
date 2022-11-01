@@ -4,6 +4,7 @@ from model.address import Address
 from model.payment import Payment
 from model.shoppingCart import ShoppingCart
 
+
 class Order:
     """! The Order Class"""
     nextID=600
@@ -17,10 +18,12 @@ class Order:
         self.__deliveryAddress = None
         self.__orderMember=aMember
         aMember.allMyOrders.append(self)
+        # Staff.allCustomerOrders.append(self)
         self.__shippingNumber= None
         self.__allOrderItems=aMember.myShoppingCart.allItems #pass shopping cart's Itemlist to order
         aMember.myShoppingCart.allItems=[]  #after that clear shopping cart
         Order.nextID += 1
+        
 
 
     @property
@@ -67,7 +70,7 @@ class Order:
 
     @orderStatus.setter
     def orderStatus(self,newStatus: str):
-        if newStatus not in ['processing', 'awaiting shipment', 'shipped', 'delivered','Cancelled']:
+        if newStatus not in ['processing', 'awaiting shipment', 'shipped', 'delivered','cancelled']:
             raise ValueError('Order Status is not in range')
         self.__orderStatus = newStatus                    
 

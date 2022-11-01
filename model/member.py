@@ -1,6 +1,7 @@
 from datetime import date
+from model.badRequestError import BadRequestError
 from model.customer import Customer
-# from model.order import Order
+# # from model.order import Order
 from model.shoppingCart import ShoppingCart
 from model.payment import Payment,CCPayment,BankPayment
 
@@ -107,28 +108,29 @@ class Member(Customer):
         # Add order to member's order list
         self.allMyOrders.append(aOrder)
 
-    def cancelOrder(self,aOrder) :
-        aOrder.orderStatus='Cancelled'
+    def cancelOrder(self,aOrder):
+        if aOrder.orderStatus in ['processing', 'awaiting shipment']:
+            aOrder.orderStatus='cancelled'
+            return True
+        else:
+            return False
+            # raise BadRequestError('This order cannot be cancelled')    
 
 
     def trackMyOrderStatus(self,aOrder) -> str:
         # Member select an order and check its status ??????????????????
         if aOrder in self.allMyOrders:
-            return aOrder.orderstatus
+            return aOrder.orderStatus
             
        
-
-    def checkOut(self) -> None:
-        # Clear Shopping Cart after an instance of Order Class created
-        # aOrder=Order(date.today(),self)
-        self.addOrder()
-        self.myShoppingCart=[]
 
     def makePayment(self,amount):
         # member make payment for the new created Order object
         aPayment=Payment(amount)
+        return True
         
 
-    def addDeliveryAddress(self,address,orderID):
-        aOrder=self.searchOrder(orderID)
-        aOrder.deliveryAddress=address
+    # def addDeliveryAddress(self,address,orderID):
+    #     aOrder=self.searchOrder(orderID)
+    #     aOrder.deliveryAddress=address
+    #     return True
