@@ -159,16 +159,18 @@ def member_page():
                         print(anAddress)
                         print(aOrder)
                         address_window.destroy()
-                        cc_payment_window=tk.Tk()
+                        cc_payment_window=tk.Toplevel()
                         cc_payment_window.title('Credit Card Payment')
                         cc_payment_window.geometry('400x400')
                         
                         def confirm_payment():
-                            aShop.updateCCPayment(orderAmount,cc_number_input.get(),cc_expired_input.get(),cc_holder_input.get(),CVC_input.get(),aOrder)
-                            showinfo(title='success',message='Thank you for your order,Your order number is {}'.format(orderID))
-                            cc_payment_window.destroy()
-                            member_page()
-                            aShop.emptyCart(memberName)
+                            try:
+                                aShop.updateCCPayment(orderAmount,cc_number_input.get(),cc_expired_input.get(),cc_holder_input.get(),CVC_input.get(),aOrder)
+                                showinfo(title='success',message='Thank you for your order,Your order number is {}'.format(orderID))
+                                cc_payment_window.destroy()
+                            except Exception as e:
+                                showinfo(message=e)
+                         
                     
                         #cc payment frame
                         cc_payment_frame=tk.Frame(cc_payment_window)
@@ -308,17 +310,17 @@ def member_page():
                     order_treeview.insert('',tk.END,values=item)
 
                 
-                # def show_order_detail():
-                #     pass
+    
                 
                 def cancel_order():
-                    if not selected_order:
-                        showinfo(title='Alert',message='Please select a Order')
                     selected_order=order_treeview.selection()[0]
                     orderID=order_treeview.item(selected_order)['values'][0]
+                    if not selected_order:
+                        showinfo(title='Alert',message='Please select a Order')
             
                     info=aShop.cancelOrder(orderID,memberName)
                     showinfo(message=info)
+                    order_history_window.destroy()
         
 
 
@@ -465,8 +467,6 @@ def guest_page():
     guest_window.title('Lincoln Online Shop')
     guest_window.geometry("800x1000")
 
-
-     
    
     def search_prod_by_name():
             prod.set(aShop.searchProductByName2(search_prod_entry.get().lower()))
@@ -517,15 +517,38 @@ def guest_page():
         sub_total_value_label.config(text=aShop.getSubTotal('guest'))
     
     def checkout():
-    ####To do: change to badrequestError to throw message from controller
         if aShop.viewCart('guest')==[]:
             showinfo(title='error',message='Cart is empty')
         else:    
             showinfo(title='error', message='Please Register first')
-            guest_window.destroy()
+            # guest_window.destroy()
             register_window=tk.Tk()
             register_window.title('Register Form')
+            register_window.geometry('400x400')
             
+            # register form frame
+            register_frame=tk.Frame(register_window)
+            register_frame.grid(column=0,row=1)
+
+            # member name label and entry
+            member_name_label=tk.Label(register_frame,text='Please enter your name').grid(column=0,row=0)
+            name_input=tk.StringVar()
+            member_name_entry=tk.Entry(register_frame,textvariable=name_input).grid(column=0,row=1)
+
+            # member phone label and entry
+            member_phone_label=tk.Label(register_frame,text='Please enter your phone number').grid(column=0,row=2)
+            phone_input=tk.StringVar()
+            member_phone_entry=tk.Entry(register_frame,textvariable=phone_input).grid(column=0,row=3)
+
+            # member email label and entry
+            member_email_label=tk.Label(register_frame,text='Please enter your email').grid(column=0,row=4)
+            email_input=tk.StringVar()
+            member_email_entry=tk.Entry(register_frame,textvariable=email_input).grid(column=0,row=5)
+
+            # member password label and entry
+            password_label=tk.Label(register_frame,text='Please enter a password').grid(column=0,row=6)
+            password_input=tk.StringVar()
+            password_entry=tk.Entry(register_frame,textvariable=password_input).grid(column=0,row=7)
 
             def register():
                 aMember=aShop.guestGetRegistered(name_input.get(),phone_input.get(),email_input.get(),password_input.get())
@@ -637,6 +660,7 @@ def guest_page():
                             aShop.updateBankPayment(orderAmount,bank_number_input.get(),bank_holder_input.get(),aOrder)
                             showinfo(title='success',message='Thank you for your order,Your order number is {}'.format(orderID))
                             bank_payment_window.destroy()
+                            # member_page()
                     
                         # bank payment frame
                         bank_payment_frame=tk.Frame(bank_payment_window)
@@ -698,29 +722,6 @@ def guest_page():
                 create_order_button.grid(column=2,row=2)
         
 
-
-            # register form frame
-            register_frame=tk.Frame(register_window).grid(column=0,row=0)
-
-            # member name label and entry
-            member_name_label=tk.Label(register_frame,text='Please enter your name').grid(column=0,row=0)
-            name_input=tk.StringVar()
-            member_name_entry=tk.Entry(register_frame,textvariable=name_input).grid(column=0,row=1)
-
-            # member phone label and entry
-            member_phone_label=tk.Label(register_frame,text='Please enter your phone number').grid(column=0,row=2)
-            phone_input=tk.StringVar()
-            member_phone_entry=tk.Entry(register_frame,textvariable=phone_input).grid(column=0,row=3)
-
-            # member email label and entry
-            member_email_label=tk.Label(register_frame,text='Please enter your email').grid(column=0,row=4)
-            email_input=tk.StringVar()
-            member_email_entry=tk.Entry(register_frame,textvariable=email_input).grid(column=0,row=5)
-
-            # member password label and entry
-            password_label=tk.Label(register_frame,text='Please enter a password').grid(column=0,row=6)
-            password_input=tk.StringVar()
-            password_entry=tk.Entry(register_frame,textvariable=password_input).grid(column=0,row=7)
 
             # register button
             register_button=tk.Button(register_frame,text='Register',command=register).grid(column=1,row=8,pady=40)

@@ -20,21 +20,7 @@ from model.badRequestError import BadRequestError
 
 from typing import List
 
-# from datetime import datetime
-# from flask import Flask
-# from flask import session
-# from flask import render_template
-# from flask import request
-# from flask import redirect
-# from datetime import date
 
-
-
-# aCart=ShoppingCart()
-# aCate=Category('Toy')
-# aProd=Product('Lego',aCate,'aa',30)
-# aCart.addItem(aProd)
-# print(len(aCart.allItems))
 class OnlineShop:
     # The OnlineShop class,Defines all the methods for the controller
     
@@ -57,6 +43,8 @@ class OnlineShop:
         if aCategory not in self.allCategories:   
             self.allCategories.append(aCategory)
             return aCategory    
+
+
         
     def __initilizerCategory(self):
         categoryFileName = open('category.txt','r')
@@ -111,15 +99,6 @@ class OnlineShop:
         return aMember  
         
 
-    # def createGuest(self):
-    #     #create an instance of guest
-    #     aCart=ShoppingCart()
-    #     aGuest=Guest(aCart)
-    #     return aGuest,aGuest.guestName
-
-
-       
-        
    
 
     def createProduct(self,prodName,prodCategory,prodDescrip,prodPrice):
@@ -127,51 +106,43 @@ class OnlineShop:
         self.allProducts.append(aProduct)
         
     
-    def createPayment(self,amount):
-        aPayment=Payment(amount)
-        return aPayment
+    # def createPayment(self,amount):
+    #     aPayment=Payment(amount)
+    #     return aPayment
 
 
-    def createBankPayment(self,amount,bankNumber):
-        aBankPayment=BankPayment(amount,bankNumber)
-        return aBankPayment
+    # def createBankPayment(self,amount,bankNumber):
+    #     aBankPayment=BankPayment(amount,bankNumber)
+    #     return aBankPayment
 
-    def createCCPayment(self,amount,CCNumber):
-        aCCPayment=CCPayment(amount,CCNumber)
-        return aCCPayment
+    # def createCCPayment(self,amount,CCNumber):
+    #     aCCPayment=CCPayment(amount,CCNumber)
+    #     return aCCPayment
     
-    def createAddress(self,street:str, suburb: str, city: str,postcode: str):
-        anAddress=Address(street,suburb,city,postcode)
-        return anAddress
+    # def createAddress(self,street:str, suburb: str, city: str,postcode: str):
+    #     anAddress=Address(street,suburb,city,postcode)
+    #     return anAddress
 
-    def createShoppingCart(self):
-        aCart=ShoppingCart()
-        return aCart
+    # def createShoppingCart(self):
+    #     aCart=ShoppingCart()
+    #     return aCart
 
 
 
-    def makePayment(self,ordID:int, mName:str,amount):
-        aPayment=self.createPayment(amount)
-        for member in self.allMembers:
-            if member.memberName==mName:
-                aMember=member
-                return aMember
-        for order in aMember.allMyOrders:
-            if order.OrderID==ordID:
-                order.payment=aPayment
+    # def makePayment(self,ordID:int, mName:str,amount):
+    #     aPayment=Payment(amount)
+    #     for member in self.allMembers:
+    #         if member.memberName==mName:
+    #             aMember=member
+    #             return aMember
+    #     for order in aMember.allMyOrders:
+    #         if order.OrderID==ordID:
+    #             order.payment=aPayment
                 
 
 
 
-    def updateDeliveryAddress(self,ordID:int, mName:str,street,suburb,city,postcode):
-        anAddress=self.createAddress(street,suburb,city,postcode)
-        for member in self.allMembers:
-            if member.memberName==mName:
-                aMember=member
-                return aMember
-        for order in aMember.allMyOrders:
-            if order.OrderID==ordID:
-                order.deliveryAddress=anAddress
+
                 
     def searchCategory(self,cateName) -> Category:
         for category in self.allCategories:
@@ -232,6 +203,25 @@ class OnlineShop:
             else:
                 return None
 
+    def staffLogIn(self,sName: int, sPassword: str) -> str :
+    #    Staff use name and password to log in
+    # If name and password match, redirect to the staff Page, 
+    # if not, indicate user to input correct name and password
+        for staff in self.allStaff:
+            if staff.staffName==sName and staff.staffPassword==sPassword:
+                return staff
+            else:
+                raise BadRequestError('User name and password does not match')
+        
+
+    def memberLogIn(self,mName: str, mPassword: str) -> str :
+        # Member use name and password to log in
+        for member in self.allMembers:
+            if member.memberName==mName and member.memberPassword==mPassword:
+                # member.myShoppingCart=self.cart
+                return member
+        else:
+            raise BadRequestError('User name and password does not match')
 
     def viewAllProducts(self) -> str:
         productList=[]
@@ -278,9 +268,6 @@ class OnlineShop:
                 anItem=item
                 aMember.removeItem(anItem)
 
-    def emptyCart(self,customerName):
-        aMember=self.searchMember(customerName)
-        aMember.emptyCart()
 
 
     def viewCart(self,customerName: str ) -> str:
@@ -295,7 +282,10 @@ class OnlineShop:
         aMember=self.searchMember(customerName)
         return '$'+str(aMember.myShoppingCart.getTotalSum())
     
- 
+    def emptyCart(self,customerName):
+        aMember=self.searchMember(customerName)
+        aMember.emptyCart()
+
     
     def placeOrder(self,dateCreated: date,memberName:str, ) -> str:
         # Create a Order Object and append it to the member's Order List
@@ -303,22 +293,45 @@ class OnlineShop:
         # Also, need to call shopping cart checkout function to clear the shopping cart
         aMember=self.searchMember(memberName)
         aOrder=Order(dateCreated,aMember)
+        Staff.allCustomerOrders.append(aOrder)
         print(len(aOrder.allOrderItems),'orderline')
         print(len(aMember.myShoppingCart.allItems),'shoppingcart')
         amount=aOrder.calOrderTotalAmount()
         orderID=aOrder.orderID
         print("controller:{}".format(amount))
         return aOrder,amount,orderID
+    
+    def searchOrder(self,orderID:int):
+        for order in Staff.allCustomerOrders:
+            if order.orderID==orderID:
+                return order
+            else:
+                return False
 
     def updateDeliveryAddress(self,street,suburb,city,postcode,aOrder:Order):
         anAddress=Address(street,suburb,city,postcode)
         aOrder.deliveryAddress=anAddress
         return anAddress
 
+    # def updateDeliveryAddress(self,ordID:int, mName:str,street,suburb,city,postcode):
+    #     anAddress=Address(street,suburb,city,postcode)
+    #     for member in self.allMembers:
+    #         if member.memberName==mName:
+    #             aMember=member
+    #             return aMember
+    #     for order in aMember.allMyOrders:
+    #         if order.OrderID==ordID:
+    #             order.deliveryAddress=anAddress
+
     def updateCCPayment(self,amount,ccNumber,ccExpired,ccHolder,CVC,aOrder:Order):
-        aCCPayment=CCPayment(amount,ccNumber,ccExpired,ccHolder,CVC)
-        aOrder.orderPayment=aCCPayment
-        return aCCPayment
+        if len(ccNumber)!=16:
+            raise BadRequestError('Card number must be 16 digital')
+        if len(CVC)!=3:
+            raise BadRequestError('CVC must be 3 digital')
+        else:
+            aCCPayment=CCPayment(amount,ccNumber,ccExpired,ccHolder,CVC)
+            aOrder.orderPayment=aCCPayment
+            return aCCPayment
 
     def updateBankPayment(self,amount,bankNumber,accountOwner,aOrder:Order):
         aBankPayment=BankPayment(amount,bankNumber,accountOwner)
@@ -337,7 +350,7 @@ class OnlineShop:
             message=f'Order has been cancelled'
             return message     
         else:
-            message=f'Order has been shipped or delivered,cannot be cancelled'
+            message=f'Order cannot be cancelled ,either it has been shipped or delivered or already cancelled'
             return message              
     
     def viewOrder(self,orderID:int, memberID:int):
@@ -365,25 +378,7 @@ class OnlineShop:
     #     @return a string The status of the order"""
     #     pass
 
-    def staffLogIn(self,sName: int, sPassword: str) -> str :
-    #    Staff use name and password to log in
-    # If name and password match, redirect to the staff Page, 
-    # if not, indicate user to input correct name and password
-        for staff in self.allStaff:
-            if staff.staffName==sName and staff.staffPassword==sPassword:
-                return staff
-            else:
-                raise BadRequestError('User name and password does not match')
-        
 
-    def memberLogIn(self,mName: str, mPassword: str) -> str :
-        # Member use name and password to log in
-        for member in self.allMembers:
-            if member.memberName==mName and member.memberPassword==mPassword:
-                # member.myShoppingCart=self.cart
-                return member
-        else:
-            raise BadRequestError('User name and password does not match')
                
     
     
@@ -401,16 +396,17 @@ class OnlineShop:
         for order in aStaff.allCustomerOrders:
             if order.orderID==ordID:
                 anOrder=order
-        anOrder.orderStatus=newStatus        
+        anOrder.orderStatus=newStatus
+        return True        
 
 
     def generateReport(self, startDate: date, endDate: date, sname: str) -> str:
-        for staff in self.allStaff:
-            if staff.staffName==sname:
-                aStaff=staff
+        aStaff=self.searchStaff(sname)
+        orderList=[]
         for order in aStaff.allCustomerOrders:
             if order.dateCreated>=startDate and order.dateCreated<=endDate:
-                return order        
+                orderList.append(order.showOrderDetails())
+        return orderList                
 
 
 # aShop=OnlineShop()
