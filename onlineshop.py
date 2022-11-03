@@ -1,5 +1,5 @@
 # Imports
-from datetime import date
+from datetime import date, datetime
 from logging import raiseExceptions
 
 
@@ -57,9 +57,7 @@ class OnlineShop:
         productFileName = open('product.txt','r')
         for line in productFileName:
             row=line.strip().split(',')
-            # print(row[1])
             a=self.searchCategory(row[1].lower())
-            # print(a)
             self.createProduct(row[0].lower(),a,row[2].lower(),row[3])
         productFileName.close()
       
@@ -105,43 +103,6 @@ class OnlineShop:
         aProduct=Product(prodName,prodCategory,prodDescrip,prodPrice)
         self.allProducts.append(aProduct)
         
-    
-    # def createPayment(self,amount):
-    #     aPayment=Payment(amount)
-    #     return aPayment
-
-
-    # def createBankPayment(self,amount,bankNumber):
-    #     aBankPayment=BankPayment(amount,bankNumber)
-    #     return aBankPayment
-
-    # def createCCPayment(self,amount,CCNumber):
-    #     aCCPayment=CCPayment(amount,CCNumber)
-    #     return aCCPayment
-    
-    # def createAddress(self,street:str, suburb: str, city: str,postcode: str):
-    #     anAddress=Address(street,suburb,city,postcode)
-    #     return anAddress
-
-    # def createShoppingCart(self):
-    #     aCart=ShoppingCart()
-    #     return aCart
-
-
-
-    # def makePayment(self,ordID:int, mName:str,amount):
-    #     aPayment=Payment(amount)
-    #     for member in self.allMembers:
-    #         if member.memberName==mName:
-    #             aMember=member
-    #             return aMember
-    #     for order in aMember.allMyOrders:
-    #         if order.OrderID==ordID:
-    #             order.payment=aPayment
-                
-
-
-
 
                 
     def searchCategory(self,cateName) -> Category:
@@ -177,7 +138,7 @@ class OnlineShop:
             for product in aCategory.getProductList():
                 prodNameList.append(product.productName)
             if len(prodNameList)==0:
-                raise BadRequestError('This no product in this Category')
+                raise BadRequestError('No product in this Category yet')
             else:
                 return prodNameList
          
@@ -248,15 +209,6 @@ class OnlineShop:
         aMember.addItem(aProduct)
         return True
             
-        #     if aMember:
-        #         aMember.addItem(aProduct) 
-        #         return 'member'
-        #     else:
-        #         self.guest.addItem(aProduct)
-        #         return 'hello'               
-        # else:
-        #     self.guest.addItem(aProduct)
-        #     return self.cart.allItems
 
 
     def removeItem(self,customerName: str, pName: str) -> str:
@@ -271,7 +223,6 @@ class OnlineShop:
 
 
     def viewCart(self,customerName: str ) -> str:
-        print(customerName)
         if customerName != 'guest':
             return self.searchMember(customerName).viewCartDetails()
             
@@ -294,11 +245,8 @@ class OnlineShop:
         aMember=self.searchMember(memberName)
         aOrder=Order(dateCreated,aMember)
         Staff.allCustomerOrders.append(aOrder)
-        print(len(aOrder.allOrderItems),'orderline')
-        print(len(aMember.myShoppingCart.allItems),'shoppingcart')
         amount=aOrder.calOrderTotalAmount()
         orderID=aOrder.orderID
-        print("controller:{}".format(amount))
         return aOrder,amount,orderID
     
     def searchOrder(self,orderID:int):
@@ -313,15 +261,7 @@ class OnlineShop:
         aOrder.deliveryAddress=anAddress
         return anAddress
 
-    # def updateDeliveryAddress(self,ordID:int, mName:str,street,suburb,city,postcode):
-    #     anAddress=Address(street,suburb,city,postcode)
-    #     for member in self.allMembers:
-    #         if member.memberName==mName:
-    #             aMember=member
-    #             return aMember
-    #     for order in aMember.allMyOrders:
-    #         if order.OrderID==ordID:
-    #             order.deliveryAddress=anAddress
+
 
     def updateCCPayment(self,amount,ccNumber,ccExpired,ccHolder,CVC,aOrder:Order):
         if len(ccNumber)!=16:
@@ -370,17 +310,6 @@ class OnlineShop:
             if member.memberName==memberName:
                 return member.viewAllMyOrders()
 
-         
-
-    # def checkOrderStatus(self,memberID:int ) -> str:
-    #     """! Member to check a Order status
-    #     @param memberID The ID of the member who create the order
-    #     @return a string The status of the order"""
-    #     pass
-
-
-               
-    
     
 
     def staffViewOrders(self,sname) -> str:
@@ -400,33 +329,37 @@ class OnlineShop:
         return True        
 
 
-    def generateReport(self, startDate: date, endDate: date, sname: str) -> str:
+    def generateReport(self, smonth, sname: str) -> str:
         aStaff=self.searchStaff(sname)
         orderList=[]
         for order in aStaff.allCustomerOrders:
-            if order.dateCreated>=startDate and order.dateCreated<=endDate:
+            month=datetime.strptime(order.dateCreated, "%Y-%m-%d").month
+            if int(month)==smonth:
                 orderList.append(order.showOrderDetails())
         return orderList                
 
 
-# aShop=OnlineShop()
-# # print(len(aShop.allCategories))
-# # print(len(aShop.allProducts))
-# # print(len(aShop.allCategories[1].productList))
-# # print(len(aShop.allStaff))
-# a=[aShop.allStaff[0].staffName,aShop.allStaff[0].staffPassword]
-# print(a)
-# print(aShop.allStaff[0].staffName)
-# b=aShop.viewAllProducts()
-# print(b)
 
-# print(len(aShop.allMembers))
-# print(len(aShop.allStaff))
-# print(aShop.allMembers[0].memberName)
-# print(aShop.allMembers[0].memberPassword)
-# print(aShop.guest.guestName)
-# print(len(aShop.allCategories))
-# try:
-#     print(aShop.searchProductByCategory('boo')[0])
-# except Exception as e1:
-#     print(e1)    
+    def assemble_order(self):
+        orderFileName = open('order.txt','r')
+        lines=orderFileName.readlines()
+        row1=lines[0].split(',')
+        row2=lines[1].split(',')
+        row3=lines[2].split(',')
+        row4=lines[3].split(',')
+        cate1=Category(row1[1].rstrip().lower())
+        prod1=Product(row1[0],cate1,row1[2],row1[3])
+        aCart=ShoppingCart()
+        member1=Member(row3[0],aCart,row3[1],row3[2],row3[3])
+        member1.addItem(prod1)
+        order1=Order('2022-10-01',member1)
+        address1=Address(row2[0],row2[1],row2[2],row2[3])
+        bpayment1=BankPayment(row4[0],row4[1],row4[2])
+        order1.deliveryAddress=address1
+        order1.orderPayment=bpayment1
+        member1.addItem(prod1)
+        member1.addItem(prod1)
+        order2=Order('2022-11-02',member1)
+        Staff.allCustomerOrders.append(order1)
+        Staff.allCustomerOrders.append(order2)
+        orderFileName.close()

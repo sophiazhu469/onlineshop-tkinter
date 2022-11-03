@@ -14,12 +14,9 @@ class Order:
         self.__dateCreated = dCreated
         self.__orderStatus = 'processing'
         self.__orderPayment = None
-        self.__billingAddress = None
         self.__deliveryAddress = None
         self.__orderMember=aMember
         aMember.allMyOrders.append(self)
-        # Staff.allCustomerOrders.append(self)
-        self.__shippingNumber= None
         self.__allOrderItems=aMember.myShoppingCart.allItems #pass shopping cart's Itemlist to order
         aMember.myShoppingCart.allItems=[]  #after that clear shopping cart
         Order.nextID += 1

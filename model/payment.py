@@ -53,9 +53,8 @@ class CCPayment(Payment):
         return str(self._amount) + ' ' + str(self.__myCardNumber)  
 
 class BankPayment(Payment):
-    """! The Bank Account Payment Class"""
+    # The Bank Account Payment Class"""
     def __init__(self, amt: float, bnumber: str,bowner):
-        """! Bank Account Payment Initializer"""
         self.__myBankNumber = bnumber
         self.__myBankOwner=bowner
         super().__init__(amt)
@@ -63,7 +62,11 @@ class BankPayment(Payment):
 
     @property
     def myBankNumber(self):
-        return self.__myBankNumber        
+        return self.__myBankNumber   
+
+    @property
+    def myBankOwner(self):
+        return self.__myBankOwner         
 
 
     def __str__(self):

@@ -14,9 +14,6 @@ class Staff(User):
         Staff.nextID += 1
 
     
-    # @property
-    # def userRole(self):
-    #     return self.__userRole
         
     @property
     def staffID(self):

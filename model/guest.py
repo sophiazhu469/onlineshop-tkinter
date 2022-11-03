@@ -7,7 +7,6 @@ class Guest(Customer):
     nextID = 200
     def __init__(self,aCart,gname='guest'):
         """! The initialiser for Guest"""
-        # self._myShoppingCart=aCart
         super().__init__(gname,aCart)
       
     @property

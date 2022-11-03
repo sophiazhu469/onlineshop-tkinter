@@ -154,7 +154,7 @@ def test_updateOrderStatus():
     
 
 def test_generateReport():
-    assert len(aShop.generateReport('2022-10-01','2022-11-02','Sophia'))==1
+    assert len(aShop.generateReport(11,'Sophia'))==1
 
 def test_cancelOrder():
     aShop.addItem('Oliver','paper mario')

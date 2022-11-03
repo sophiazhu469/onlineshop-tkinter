@@ -62,10 +62,6 @@ class Product:
         return self.productName==other.productName
 
 
-    # def __eq__(self,other) -> bool:
-    #     # Compare product Category with a given Category
-    #     return self.productCategory==other.productCategory
-
 
     def displayProduct(self):
         return self.productName + ':$' + str(self.productPrice)

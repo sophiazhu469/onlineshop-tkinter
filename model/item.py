@@ -8,11 +8,7 @@ class Item:
         
         self.__itemProduct=aProduct
         self.__quantity=quantity
-        # self.__itemID=aProduct.productID
 
-
-    # def __str__(self):
-    #     return (self.__itemProduct.productName,str(self.__quantity) ,str(self.calculateTotal()))  
 
     def __eq__(self,other):
         return self.itemProduct==other.itemProduct  
@@ -20,12 +16,6 @@ class Item:
     @property
     def itemProduct(self):
         return self.__itemProduct
-
-
-    # @property
-    # def itemID(self):
-    #     return self.__itemID    
-
         
 
     @property

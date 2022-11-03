@@ -1,0 +1,4 @@
+Toytrain,Toy,wooden train,30
+17 Lin St,halswell,CHC,8025
+Oliver,02111111,oli@gmail.com,a
+35.0,12345678,sam
