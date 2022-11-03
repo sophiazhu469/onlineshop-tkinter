@@ -1,4 +1,4 @@
-# throw this error when failed to pass validation, e.g. invalid customer name
+# throw this error when failed to pass validation, e.g. invalid username ,password
 
 class BadRequestError(Exception):
     def __init__(self, message='Invalid request'):

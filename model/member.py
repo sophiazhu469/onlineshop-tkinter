@@ -1,7 +1,6 @@
 from datetime import date
 from model.badRequestError import BadRequestError
 from model.customer import Customer
-# # from model.order import Order
 from model.shoppingCart import ShoppingCart
 from model.payment import Payment,CCPayment,BankPayment
 
@@ -110,11 +109,11 @@ class Member(Customer):
             return True
         else:
             return False
-            # raise BadRequestError('This order cannot be cancelled')    
+             
 
 
     def trackMyOrderStatus(self,aOrder) -> str:
-        # Member select an order and check its status ??????????????????
+        # Member select an order and check its status 
         if aOrder in self.allMyOrders:
             return aOrder.orderStatus
             

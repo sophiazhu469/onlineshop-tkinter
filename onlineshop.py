@@ -339,7 +339,7 @@ class OnlineShop:
         return orderList                
 
 
-
+    # create some order objects to test staff functionality
     def assemble_order(self):
         orderFileName = open('order.txt','r')
         lines=orderFileName.readlines()

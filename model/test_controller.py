@@ -163,3 +163,8 @@ def test_cancelOrder():
     aMember=aShop.searchMember('Oliver')
     aOrder=aMember.searchOrder(601)
     assert aOrder.orderStatus=='cancelled'
+
+def test_assemble_order():
+    aShop.assemble_order()
+    # as above test functions already create 2 orders, and in the assemble_order functions, 2 orders have been created.
+    assert len(Staff.allCustomerOrders) ==4   

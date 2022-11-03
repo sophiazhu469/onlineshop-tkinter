@@ -1,7 +1,6 @@
 class Address:
-    """! The Address Class"""
+    # The Address Class
     def __init__(self,street:str, suburb: str, city: str,postcode: str):
-        """! The Address Initializer"""
         self.__myStreet = street
         self.__mySuburb = suburb
         self.__myCity = city
